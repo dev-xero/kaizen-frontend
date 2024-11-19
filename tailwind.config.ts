@@ -8,6 +8,13 @@ const config: Config = {
     "./layouts/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  variants: {
+    extend: {
+      borderColor: ['focus'],
+      ringWidth: ['focus'],
+      ringColor: ['focus'],
+    },
+  },
   theme: {
   	extend: {
   		colors: {
