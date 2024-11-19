@@ -14,7 +14,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-    title: '改 善 Kaizen',
+    title: 'Kaizen 改 善 ',
     description:
         'Meaning continuous improvement, is a minimal Japanese-inspired task management web app for humans. ',
 };
