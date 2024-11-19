@@ -1,5 +1,6 @@
 'use client';
 
+import FormFooter from '@/components/formfooter';
 import KaizenLogo from '@/components/kaizen';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,7 +13,9 @@ function LoginForm() {
         <form onSubmit={(e) => e.preventDefault()} className="max-w-lg">
             <KaizenLogo />
             <h2 className="font-bold text-2xl my-2">Login</h2>
-            <p className="text-gray-700">Welcome back to Kaizen 改 善 — we&apos;re glad to see you again.</p>
+            <p className="text-gray-700">
+                Welcome back to Kaizen 改 善 — we&apos;re glad to see you again.
+            </p>
             {/* TextFields */}
             <div className="flex flex-col gap-2 my-4">
                 {/* EMAIL ADDRESS */}
@@ -54,6 +57,7 @@ function LoginForm() {
             >
                 Login
             </Button>
+            <FormFooter alternative="signup" />
         </form>
     );
 }

@@ -1,5 +1,6 @@
 'use client';
 
+import FormFooter from '@/components/formfooter';
 import KaizenLogo from '@/components/kaizen';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -73,6 +74,7 @@ function SignUpForm() {
             >
                 Sign Up
             </Button>
+            <FormFooter alternative="login" />
         </form>
     );
 }
