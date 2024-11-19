@@ -1,5 +1,6 @@
 'use client';
 
+import KaizenLogo from '@/components/kaizen';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import CenteredGridLayout from '@/layouts/CenteredGridLayout';
@@ -9,7 +10,8 @@ import { At, Lock, UserCircle } from '@phosphor-icons/react';
 function LoginForm() {
     return (
         <form onSubmit={(e) => e.preventDefault()} className="max-w-lg">
-            <h2 className="font-bold text-2xl mb-2">Login</h2>
+            <KaizenLogo />
+            <h2 className="font-bold text-2xl my-2">Login</h2>
             <p>
                 Kaizen 改 善 — Meaning continuous improvement, is a minimal
                 Japanese-inspired task management web app for humans.
