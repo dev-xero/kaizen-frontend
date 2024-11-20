@@ -61,7 +61,7 @@ function SignUpForm() {
                         name="kaizen-password"
                         type="password"
                         required={true}
-                        placeholder="Username"
+                        placeholder="Password"
                         className={cn(
                             'pl-10 py-2 border border-gray-300 focus-visible:border-indigo-500 rounded-md focus:ring-2 focus-visible:ring-2 focus:ring-indigo-100 focus:!outline-none focus-visible:ring-indigo-100'
                         )}
