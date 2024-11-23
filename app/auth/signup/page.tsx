@@ -18,7 +18,7 @@ function SignUpForm() {
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
 
-    const [isDisabled, setIsDisabled] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(true);
     const [errMessage, setErrMessage] = useState('');
 
     function prepareHandler() {
