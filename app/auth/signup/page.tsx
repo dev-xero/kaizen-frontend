@@ -9,6 +9,8 @@ import { cn } from '@/lib/utils';
 import { At, Lock, UserCircle } from '@phosphor-icons/react';
 
 function SignUpForm() {
+    
+
     return (
         <form onSubmit={(e) => e.preventDefault()} className="max-w-lg">
             <KaizenLogo />
