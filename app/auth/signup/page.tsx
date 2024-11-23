@@ -7,12 +7,20 @@ import { Input } from '@/components/ui/input';
 import CenteredGridLayout from '@/layouts/CenteredGridLayout';
 import { cn } from '@/lib/utils';
 import { At, Lock, UserCircle } from '@phosphor-icons/react';
+import { useRouter } from 'next/navigation';
+import { FormEvent } from 'react';
 
 function SignUpForm() {
-    
+    const router = useRouter();
+
+    function handleSignUpEvent(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+
+        router.push('/email/sent');
+    }
 
     return (
-        <form onSubmit={(e) => e.preventDefault()} className="max-w-lg">
+        <form onSubmit={handleSignUpEvent} className="max-w-lg">
             <KaizenLogo />
             <h2 className="font-bold text-2xl my-2">Sign Up</h2>
             <p className="text-gray-700">

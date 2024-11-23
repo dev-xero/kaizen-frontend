@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import QueryProvider from '@/providers/queryclient';
 
 const geistSans = localFont({
     src: './fonts/GeistVF.woff',
@@ -34,15 +34,13 @@ export const metadata: Metadata = {
     metadataBase: new URL('https://kaizenweb.vercel.app'),
 };
 
-const queryClient = new QueryClient();
-
 export default function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
     return (
-        <QueryClientProvider client={queryClient}>
+        <QueryProvider>
             <html lang="en">
                 <body
                     className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background`}
@@ -50,6 +48,6 @@ export default function RootLayout({
                     {children}
                 </body>
             </html>
-        </QueryClientProvider>
+        </QueryProvider>
     );
 }
