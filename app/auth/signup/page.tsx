@@ -3,19 +3,23 @@
 import ErrorMessage from '@/components/error';
 import FormFooter from '@/components/formfooter';
 import KaizenLogo from '@/components/kaizen';
+import Spinner from '@/components/spinner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import env from '@/config/environment';
+import keys from '@/config/keys';
 import NetworkConfig from '@/config/network';
 import CenteredGridLayout from '@/layouts/CenteredGridLayout';
 import { cn } from '@/lib/utils';
+import { getDateAfter } from '@/util/date';
+import TransformErrorMessage from '@/util/transformer';
 import { At, Lock, UserCircle } from '@phosphor-icons/react';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
-import { useRouter } from 'next/navigation';
+import { setCookie } from 'cookies-next';
 import { FormEvent, useState } from 'react';
 import { SignUpResponse, UserDTO } from './signup.types';
-import ExtractErrorMessage from '@/util/extractRequestError';
+// import { useRouter } from 'next/navigation';
 
 function SignUpForm() {
     // const router = useRouter();
@@ -27,6 +31,7 @@ function SignUpForm() {
     const [isDisabled, setIsDisabled] = useState(false);
     const [errMessage, setErrMessage] = useState('');
 
+    // Makes sign up request
     async function signUpRequest(userDTO: UserDTO) {
         const endpoint = `${env.api}/auth/signup`;
         const { data } = await axios.post(endpoint, userDTO, NetworkConfig);
@@ -34,8 +39,21 @@ function SignUpForm() {
         return data;
     }
 
-    function signUpRequestCompleted(data: SignUpResponse) {
-        console.log('data:', data);
+    // Saves server response in local storage and cookies
+    function signUpRequestCompleted(res: SignUpResponse) {
+        const { accessToken, refreshToken, obfuscatedEmail } = res;
+        console.log(res);
+
+        localStorage.setItem(keys.obfuscatedEmailKey, obfuscatedEmail);
+
+        setCookie(keys.accessTokenKey, accessToken, {
+            expires: getDateAfter(1),
+        });
+
+        setCookie(keys.refreshTokenKey, refreshToken, {
+            expires: getDateAfter(48),
+        });
+
         // router.push('/email/sent');
     }
 
@@ -44,7 +62,7 @@ function SignUpForm() {
         onSuccess: signUpRequestCompleted,
         onError: (err) => {
             console.warn(err);
-            const errMsg = ExtractErrorMessage(err);
+            const errMsg = TransformErrorMessage(err);
 
             displayErrorMessage(errMsg);
         },
@@ -162,10 +180,16 @@ function SignUpForm() {
             </div>
             <Button
                 name="kaizen-button"
-                className="bg-indigo-500 font-bold text-xl mt-2 w-full hover:bg-indigo-600"
+                className="bg-indigo-500 font-bold text-xl mt-2 w-full hover:bg-indigo-600 disabled:opacity-90 disabled:cursor-default"
                 disabled={isDisabled}
             >
-                {signUpMutation.isPending ? 'Signing Up' : 'Sign Up'}
+                {signUpMutation.isPending ? (
+                    <span className="flex gap-2 items-center justify-center">
+                        <Spinner /> Signing Up
+                    </span>
+                ) : (
+                    <span>Sign Up</span>
+                )}
             </Button>
             <FormFooter alternative="login" />
         </form>
