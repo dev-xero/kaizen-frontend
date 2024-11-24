@@ -5,27 +5,58 @@ import FormFooter from '@/components/formfooter';
 import KaizenLogo from '@/components/kaizen';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import env from '@/config/environment';
+import NetworkConfig from '@/config/network';
 import CenteredGridLayout from '@/layouts/CenteredGridLayout';
 import { cn } from '@/lib/utils';
 import { At, Lock, UserCircle } from '@phosphor-icons/react';
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
+import { SignUpResponse, UserDTO } from './signup.types';
+import ExtractErrorMessage from '@/util/extractRequestError';
 
 function SignUpForm() {
-    const router = useRouter();
+    // const router = useRouter();
 
-    const [emailAddress, setEmailAddress] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
 
-    const [isDisabled, setIsDisabled] = useState(true);
+    const [isDisabled, setIsDisabled] = useState(false);
     const [errMessage, setErrMessage] = useState('');
 
+    async function signUpRequest(userDTO: UserDTO) {
+        const endpoint = `${env.api}/auth/signup`;
+        const { data } = await axios.post(endpoint, userDTO, NetworkConfig);
+
+        return data;
+    }
+
+    function signUpRequestCompleted(data: SignUpResponse) {
+        console.log('data:', data);
+        // router.push('/email/sent');
+    }
+
+    const signUpMutation = useMutation({
+        mutationFn: signUpRequest,
+        onSuccess: signUpRequestCompleted,
+        onError: (err) => {
+            console.warn(err);
+            const errMsg = ExtractErrorMessage(err);
+
+            displayErrorMessage(errMsg);
+        },
+    });
+
+    // Clears error messages and disables the button
     function prepareHandler() {
         setErrMessage('');
         setIsDisabled(true);
     }
 
+    // Displays error messages and re-enables the button
     function displayErrorMessage(msg: string) {
         setErrMessage(msg);
         setIsDisabled(false);
@@ -39,7 +70,7 @@ function SignUpForm() {
         const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
         // Email address must be valid
-        if (!emailRegex.test(emailAddress)) {
+        if (!emailRegex.test(email)) {
             displayErrorMessage('Please enter a valid email address.');
             return;
         }
@@ -60,14 +91,7 @@ function SignUpForm() {
             return;
         }
 
-        try {
-            // make mutation request
-        } catch (err) {
-            console.error(err);
-            setErrMessage('Something went wrong.');
-        }
-
-        router.push('/email/sent');
+        signUpMutation.mutate({ email, username, password });
     }
 
     return (
@@ -94,8 +118,8 @@ function SignUpForm() {
                         className={cn(
                             'pl-10 py-2 border border-gray-300 focus-visible:border-indigo-500 rounded-md focus:ring-2 focus-visible:ring-2 focus:ring-indigo-100 focus:!outline-none focus-visible:ring-indigo-100'
                         )}
-                        value={emailAddress}
-                        onChange={(e) => setEmailAddress(e.target.value)}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                     />
                 </div>
                 {/* USERNAME */}
@@ -141,7 +165,7 @@ function SignUpForm() {
                 className="bg-indigo-500 font-bold text-xl mt-2 w-full hover:bg-indigo-600"
                 disabled={isDisabled}
             >
-                Sign Up
+                {signUpMutation.isPending ? 'Signing Up' : 'Sign Up'}
             </Button>
             <FormFooter alternative="login" />
         </form>
