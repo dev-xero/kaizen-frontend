@@ -41,8 +41,7 @@ function SignUpForm() {
 
     // Saves server response in local storage and cookies
     function signUpRequestCompleted(res: SignUpResponse) {
-        const { accessToken, refreshToken, obfuscatedEmail } = res;
-        console.log(res);
+        const { accessToken, refreshToken, obfuscatedEmail } = res.data;
 
         localStorage.setItem(keys.obfuscatedEmailKey, obfuscatedEmail);
 
