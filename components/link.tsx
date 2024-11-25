@@ -9,7 +9,7 @@ export default function Link(props: LinkProps) {
         <a
             href={props.href}
             target={props.external ? '_blank' : '_self'}
-            className="underline underline-offset-3 text-gray-700 hover:text-indigo-500 text-sm"
+            className="underline underline-offset-4 text-gray-700 hover:text-indigo-500 text-sm"
         >
             {props.text}
         </a>
