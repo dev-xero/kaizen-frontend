@@ -16,8 +16,9 @@ import { At, Lock, UserCircle } from '@phosphor-icons/react';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { FormEvent, useState } from 'react';
-import { SignUpResponse, UserDTO } from './signup.types';
+import { SignUpResponse, SignUpDTO } from './signup.types';
 import { useRouter } from 'next/navigation';
+import { emailRegex } from '@/config/regex';
 
 function SignUpForm() {
     const router = useRouter();
@@ -30,7 +31,7 @@ function SignUpForm() {
     const [errMessage, setErrMessage] = useState('');
 
     // Makes sign up request
-    async function signUpRequest(userDTO: UserDTO) {
+    async function signUpRequest(userDTO: SignUpDTO) {
         const endpoint = `${env.api}/auth/signup`;
         const { data } = await axios.post(endpoint, userDTO, NetworkConfig);
 
@@ -73,8 +74,6 @@ function SignUpForm() {
         event.preventDefault();
 
         prepareHandler();
-
-        const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 
         // Email address must be valid
         if (!emailRegex.test(email)) {
