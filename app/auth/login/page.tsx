@@ -51,6 +51,9 @@ function LoginForm() {
         setCookie(keys.refreshTokenKey, refreshToken, {
             expires: getDateAfter(48),
         });
+
+        // Delete any saved obfuscated email if present
+        localStorage.removeItem(keys.obfuscatedEmailKey);
     }
 
     // Signin mutation
