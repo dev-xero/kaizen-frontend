@@ -1,3 +1,5 @@
+'use client';
+
 import keys from '@/config/keys';
 import { hasCookie } from 'cookies-next';
 import { useEffect, useState } from 'react';
@@ -18,7 +20,7 @@ export const useAuth = () => {
             setTimeout(() => {
                 setIsAuthenticated(checkSession());
                 setIsLoading(false);
-            }, 1000);
+            }, 500);
         }
 
         checkAuthStatus();

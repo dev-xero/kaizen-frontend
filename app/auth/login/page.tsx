@@ -1,43 +1,47 @@
 'use client';
 
-import FormFooter from '@/components/formfooter';
-import KaizenLogo from '@/components/kaizen';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import CenteredGridLayout from '@/layouts/CenteredGridLayout';
-import { cn } from '@/lib/utils';
-import { At, Lock } from '@phosphor-icons/react';
-import { SignInDTO, SignInResponse } from './signin.types';
-import NetworkConfig from '@/config/network';
-import axios from 'axios';
-import { useMutation } from '@tanstack/react-query';
-import TransformErrorMessage from '@/util/transformer';
-import { FormEvent, useState } from 'react';
 import { emailRegex } from '@/config/regex';
-import Spinner from '@/components/spinner';
+import { cn } from '@/lib/utils';
+import { getDateAfter } from '@/util/date';
+import { At, Lock } from '@phosphor-icons/react';
+import { useMutation } from '@tanstack/react-query';
+import { setCookie } from 'cookies-next';
+import { useRouter } from 'next/navigation';
+import { FormEvent, useState } from 'react';
+import { LogInDTO, LogInResponse } from './login.types';
+
 import ErrorMessage from '@/components/error';
+import FormFooter from '@/components/formfooter';
+import KaizenLogo from '@/components/kaizen';
+import Spinner from '@/components/spinner';
 import env from '@/config/environment';
 import keys from '@/config/keys';
-import { setCookie } from 'cookies-next';
-import { getDateAfter } from '@/util/date';
+import NetworkConfig from '@/config/network';
+import CenteredGridLayout from '@/layouts/CenteredGridLayout';
+import TransformErrorMessage from '@/util/transformer';
+import axios from 'axios';
 
 function LoginForm() {
+    const router = useRouter();
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
     const [isDisabled, setIsDisabled] = useState(false);
     const [errMessage, setErrMessage] = useState('');
 
-    // Makes sign in request
-    async function signInRequest(signInDTO: SignInDTO) {
+    // Makes log in request
+    async function logInRequest(logInDTO: LogInDTO) {
         const endpoint = `${env.api}/auth/signin`;
-        const { data } = await axios.post(endpoint, signInDTO, NetworkConfig);
+        const { data } = await axios.post(endpoint, logInDTO, NetworkConfig);
 
         return data;
     }
 
-    // Called after a successful signin attempt
-    function signInRequestCompleted(res: SignInResponse) {
+    // Called after a successful login attempt
+    function LogInRequestCompleted(res: LogInResponse) {
         const { accessToken, refreshToken, ...user } = res.data;
 
         localStorage.setItem(keys.userKey, JSON.stringify(user));
@@ -54,12 +58,14 @@ function LoginForm() {
 
         // Delete any saved obfuscated email if present
         localStorage.removeItem(keys.obfuscatedEmailKey);
+
+        router.push('/');
     }
 
-    // Signin mutation
-    const signinMutation = useMutation({
-        mutationFn: signInRequest,
-        onSuccess: signInRequestCompleted,
+    // Login mutation
+    const loginMutation = useMutation({
+        mutationFn: logInRequest,
+        onSuccess: LogInRequestCompleted,
         onError: (err) => {
             console.warn(err);
             const msg = TransformErrorMessage(err);
@@ -97,7 +103,7 @@ function LoginForm() {
             );
         }
 
-        signinMutation.mutate({ email, password });
+        loginMutation.mutate({ email, password });
     }
 
     return (
@@ -152,7 +158,7 @@ function LoginForm() {
                 className="bg-indigo-500 font-bold text-xl mt-2 w-full hover:bg-indigo-600 disabled:opacity-90 disabled:cursor-default"
                 disabled={isDisabled}
             >
-                {signinMutation.isPending ? (
+                {loginMutation.isPending ? (
                     <span className="flex gap-2 items-center justify-center">
                         <Spinner /> Logging In
                     </span>

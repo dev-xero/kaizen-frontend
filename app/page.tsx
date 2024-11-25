@@ -1,7 +1,10 @@
-import { redirect } from 'next/navigation';
+import ProtectedPage from '@/components/protectedpage';
+import HomeFragment from '@/fragments/homefragment';
 
 export default function Home() {
-    redirect('/auth/signup');
-
-    return <div>Kaizen Home</div>;
+    return (
+        <ProtectedPage>
+            <HomeFragment />
+        </ProtectedPage>
+    );
 }

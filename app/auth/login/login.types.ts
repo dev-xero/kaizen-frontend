@@ -1,15 +1,15 @@
 import { User } from '@/types/user.type';
 
-export type SignInDTO = {
+export type LogInDTO = {
     email: string;
     password: string;
 };
 
-type PartialSignInResponse = {
+type PartialLogInResponse = {
     accessToken: string;
     refreshToken: string;
 };
 
-export type SignInResponse = {
-    data: PartialSignInResponse & User;
+export type LogInResponse = {
+    data: PartialLogInResponse & User;
 };
