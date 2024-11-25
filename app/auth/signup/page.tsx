@@ -19,10 +19,10 @@ import axios from 'axios';
 import { setCookie } from 'cookies-next';
 import { FormEvent, useState } from 'react';
 import { SignUpResponse, UserDTO } from './signup.types';
-// import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 function SignUpForm() {
-    // const router = useRouter();
+    const router = useRouter();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -53,7 +53,7 @@ function SignUpForm() {
             expires: getDateAfter(48),
         });
 
-        // router.push('/email/sent');
+        router.push('/email/sent');
     }
 
     const signUpMutation = useMutation({

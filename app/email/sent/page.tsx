@@ -1,11 +1,17 @@
 'use client';
 
 import { Mailbox } from '@phosphor-icons/react';
+import { redirect } from 'next/navigation';
 
+import keys from '@/config/keys';
 import CenteredGridLayout from '@/layouts/CenteredGridLayout';
 
 function EmailVerificationSection() {
-    const email = 'default@gmail.com';
+    const email = localStorage.getItem(keys.obfuscatedEmailKey);
+
+    if (!email) {
+        redirect('/auth/signup');
+    }
 
     return (
         <main>
