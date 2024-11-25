@@ -11,12 +11,10 @@ import keys from '@/config/keys';
 import NetworkConfig from '@/config/network';
 import CenteredGridLayout from '@/layouts/CenteredGridLayout';
 import { cn } from '@/lib/utils';
-import { getDateAfter } from '@/util/date';
 import TransformErrorMessage from '@/util/transformer';
 import { At, Lock, UserCircle } from '@phosphor-icons/react';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
-import { setCookie } from 'cookies-next';
 import { FormEvent, useState } from 'react';
 import { SignUpResponse, UserDTO } from './signup.types';
 import { useRouter } from 'next/navigation';
@@ -41,17 +39,9 @@ function SignUpForm() {
 
     // Saves server response in local storage and cookies
     function signUpRequestCompleted(res: SignUpResponse) {
-        const { accessToken, refreshToken, obfuscatedEmail } = res.data;
+        const { obfuscatedEmail } = res.data;
 
         localStorage.setItem(keys.obfuscatedEmailKey, obfuscatedEmail);
-
-        setCookie(keys.accessTokenKey, accessToken, {
-            expires: getDateAfter(1),
-        });
-
-        setCookie(keys.refreshTokenKey, refreshToken, {
-            expires: getDateAfter(48),
-        });
 
         router.push('/email/sent');
     }

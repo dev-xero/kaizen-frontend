@@ -7,7 +7,5 @@ export type UserDTO = {
 export type SignUpResponse = {
     data: {
         obfuscatedEmail: string;
-        accessToken: string;
-        refreshToken: string;
     };
 };
