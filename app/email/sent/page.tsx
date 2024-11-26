@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { Mailbox } from '@phosphor-icons/react';
 import { redirect } from 'next/navigation';
 
@@ -7,10 +8,19 @@ import keys from '@/config/keys';
 import CenteredGridLayout from '@/layouts/CenteredGridLayout';
 
 function EmailVerificationSection() {
-    const email = localStorage.getItem(keys.obfuscatedEmailKey);
+    const [email, setEmail] = useState<string | null>(null);
 
-    if (!email) {
-        redirect('/auth/signup');
+    useEffect(() => {
+        const storedEmail = localStorage.getItem(keys.obfuscatedEmailKey);
+        if (!storedEmail) {
+            redirect('/auth/signup');
+        } else {
+            setEmail(storedEmail);
+        }
+    }, []);
+
+    if (email === null) {
+        return null;
     }
 
     return (
