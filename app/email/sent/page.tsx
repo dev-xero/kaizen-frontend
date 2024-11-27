@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation';
 
 import keys from '@/config/keys';
 import CenteredGridLayout from '@/layouts/CenteredGridLayout';
+import { hasCookie } from 'cookies-next';
 
 function EmailVerificationSection() {
     const [email, setEmail] = useState<string | null>(null);
@@ -13,7 +14,11 @@ function EmailVerificationSection() {
     useEffect(() => {
         const storedEmail = localStorage.getItem(keys.obfuscatedEmailKey);
         if (!storedEmail) {
-            redirect('/auth/signup');
+            if (hasCookie(keys.accessTokenKey)) {
+                redirect('/');
+            } else {
+                redirect('/auth/signup');
+            }
         } else {
             setEmail(storedEmail);
         }
