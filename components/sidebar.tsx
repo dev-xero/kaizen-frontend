@@ -16,9 +16,8 @@ function SidebarItem(props: SidebarItemProps) {
     return (
         <li
             className={clsx(
-                'flex gap-2 items-center cursor-pointer p-2 hover:border-y-[#ECEDEFAA] select-none relative border border-transparent',
-                props.isActive &&
-                    'bg-[#ECEDEFAA]  !border-y-indigo-200'
+                'flex gap-2 items-center cursor-pointer p-2 hover:border-y-[#ECEDEFAA] select-none relative border border-transparent font-[family-name:var(--font-geist-sans)]',
+                props.isActive && 'bg-[#ECEDEFAA]  !border-y-indigo-200'
             )}
             onClick={props.onClick}
         >

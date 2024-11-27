@@ -1,7 +1,9 @@
+import LargeTimeDisplay from '@/components/largetimedisplay';
+
 export default function PersonalView() {
     return (
         <section>
-            <h2>Personal View</h2>
+            <LargeTimeDisplay />
         </section>
-    )
+    );
 }
