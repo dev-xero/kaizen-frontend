@@ -156,7 +156,7 @@ function LoginForm() {
             <Button
                 name="kaizen-button"
                 className="bg-indigo-500 font-bold text-xl mt-2 w-full hover:bg-indigo-600 disabled:opacity-90 disabled:cursor-default"
-                disabled={isDisabled}
+                disabled={isDisabled || loginMutation.isPending}
             >
                 {loginMutation.isPending ? (
                     <span className="flex gap-2 items-center justify-center">
