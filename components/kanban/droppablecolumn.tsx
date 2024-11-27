@@ -41,7 +41,11 @@ export default function DroppableColumn(props: DroppableColumnProps) {
                             )}
                         >
                             {props.tasks.length == 0 ? (
-                                <TaskPlaceholder />
+                                snapshot.isDraggingOver ? (
+                                    <div></div>
+                                ) : (
+                                    <TaskPlaceholder />
+                                )
                             ) : (
                                 props.tasks.map((task, idx) => (
                                     <DraggableTask

@@ -5,99 +5,59 @@ import { useState } from 'react';
 import DroppableColumn from './droppablecolumn';
 import Task from '@/types/task.type';
 
+type TasksState = {
+    todo: Task[];
+    progress: Task[];
+    testing: Task[];
+    completed: Task[];
+};
+
 export default function KanbanBoard() {
-    const [todoTasks, setTodoTasks] = useState<Task[]>([
-        {
-            title: 'Finish the DnD component.',
-            summary: 'Finish implementing DnD component.',
-            id: '1',
-        },
-        {
-            title: 'Connect this to the backend.',
-            summary: 'Implement the get tasks endpoint.',
-            id: '2',
-        },
-    ]);
-    const [inProgressTasks, setInprogressTasks] = useState<Task[]>([]);
-    const [testingTasks, setTestingTasks] = useState<Task[]>([]);
-    const [completedTasks, setCompletedTasks] = useState<Task[]>([]);
+    const [tasks, setTasks] = useState<TasksState>({
+        todo: [
+            {
+                title: 'Finish the DnD component.',
+                summary: 'Complete drag and drop implementation.',
+                id: '1',
+            },
+            {
+                title: 'Connect this to the backend.',
+                summary: 'Implement an api endpoint for updating tasks.',
+                id: '2',
+            },
+        ],
+        progress: [],
+        testing: [],
+        completed: [],
+    });
 
     function handleDragEnd(result: DropResult) {
-        const { destination, source, draggableId } = result;
+        const { source, destination } = result;
 
-        // Ignore moving to the same column or invalid destination
-        if (!destination || source.droppableId == destination.droppableId) {
+        if (!destination || source.droppableId === destination.droppableId) {
             return;
         }
 
-        // Remove this task from its current state
-        deletePreviousBoardState(source.droppableId, draggableId);
+        setTasks((prevTasks) => {
+            const sourceKey = source.droppableId as keyof TasksState;
+            const destinationKey = destination.droppableId as keyof TasksState;
 
-        const task = findItemById(draggableId, [
-            ...todoTasks,
-            ...inProgressTasks,
-            ...testingTasks,
-            ...completedTasks,
-        ]) as Task;
+            const sourceTasks = Array.from(prevTasks[sourceKey]);
+            const destinationTasks = Array.from(prevTasks[destinationKey]);
 
-        // Update board state
-        setNewBoardState(destination.droppableId, task);
+            // Find and remove the task from the source
+            const [movedTask] = sourceTasks.splice(source.index, 1);
+
+            // Add the task to the destination
+            destinationTasks.splice(destination.index, 0, movedTask);
+
+            return {
+                ...prevTasks,
+                [source.droppableId]: sourceTasks,
+                [destination.droppableId]: destinationTasks,
+            };
+        });
     }
-
-    // -- UTILITIES -- //
-
-    function deletePreviousBoardState(
-        sourceDroppableId: string,
-        taskId: string
-    ) {
-        switch (sourceDroppableId) {
-            case 'todo':
-                setTodoTasks(removeItemById(taskId, todoTasks));
-                break;
-
-            case 'in-progress':
-                setInprogressTasks(removeItemById(taskId, inProgressTasks));
-                break;
-
-            case 'testing':
-                setTestingTasks(removeItemById(taskId, testingTasks));
-                break;
-
-            case 'completed':
-                setCompletedTasks(removeItemById(taskId, completedTasks));
-                break;
-        }
-    }
-
-    function setNewBoardState(destinationDroppableId: string, task: Task) {
-        switch (destinationDroppableId) {
-            case 'todo':
-                setTodoTasks([task, ...todoTasks]);
-                break;
-
-            case 'in-progress':
-                setInprogressTasks([task, ...inProgressTasks]);
-                break;
-
-            case 'testing':
-                setTestingTasks([task, ...testingTasks]);
-                break;
-
-            case 'completed':
-                setCompletedTasks([task, ...completedTasks]);
-                break;
-        }
-    }
-
-    function findItemById(id: string, tasks: Task[]) {
-        return tasks.find((item) => item.id == id);
-    }
-
-    function removeItemById(id: string, tasks: Task[]) {
-        return tasks.filter((item) => item.id != id);
-    }
-
-    // -- UTILITIES -- //
 
     return (
         <section className="my-2">
@@ -105,22 +65,22 @@ export default function KanbanBoard() {
                 <section className="p-4 w-full border border-[#D4D5D6] rounded-md bg-white flex gap-2">
                     <DroppableColumn
                         title="To-Do"
-                        tasks={todoTasks}
+                        tasks={tasks['todo']}
                         id="todo"
                     />
                     <DroppableColumn
                         title="In Progress"
-                        tasks={inProgressTasks}
-                        id="in-progress"
+                        tasks={tasks['progress']}
+                        id="progress"
                     />
                     <DroppableColumn
                         title="Testing"
-                        tasks={testingTasks}
+                        tasks={tasks['testing']}
                         id="testing"
                     />
                     <DroppableColumn
                         title="Completed"
-                        tasks={completedTasks}
+                        tasks={tasks['completed']}
                         id="completed"
                     />
                 </section>
