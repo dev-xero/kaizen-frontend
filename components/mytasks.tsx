@@ -1,5 +1,13 @@
 import { FolderOpen } from '@phosphor-icons/react';
 
+function MyTasksKanbanBoardView() {
+    return (
+        <section className="my-4">
+          
+        </section>
+    );
+}
+
 export default function MyTasks() {
     return (
         <section className="my-4 font-[family-name:var(--font-geist-sans)]">
@@ -10,6 +18,7 @@ export default function MyTasks() {
             <p className="text-gray-700 text-lg mt-2">
                 These are tasks you&apos;ve set to complete for yourself.
             </p>
+            <MyTasksKanbanBoardView />
         </section>
     );
 }
