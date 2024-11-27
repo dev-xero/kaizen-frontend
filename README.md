@@ -6,7 +6,7 @@ Kaizen 改 善 — Meaning continuous improvement, is a minimal Japanese-inspire
 
 1. NextJS (Typescript): React Framework with SSR support and optimizations.
 2. TailwindCSS: CSS in code via utility classes.
-3. Shadcdn UI (Radix UI): Minimally designed component library.
+3. Shadcn UI (Radix UI): Minimally designed component library.
 4. Axios: Robust http fetch API wrapper.
 5. Lottie React: For animated components.
 6. Phosphor Icons: UI icon library.
