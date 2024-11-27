@@ -1,9 +1,10 @@
 import { FolderOpen } from '@phosphor-icons/react';
+import KanbanBoard from './kanban/kanbanboard';
 
 function MyTasksKanbanBoardView() {
     return (
         <section className="my-4">
-          
+            <KanbanBoard />
         </section>
     );
 }
