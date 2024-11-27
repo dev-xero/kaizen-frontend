@@ -8,11 +8,11 @@ export default function LargeTimeDisplay() {
     useEffect(() => {
         const interval = setInterval(() => {
             setCurrDate(new Date()); // Update to the current time
-        }, 1000 * 60);
-
+        }, 1000); // Update every second
+    
         return () => clearInterval(interval);
     }, []);
-
+        
     function formatTime(currDate: Date): string {
         const minute = currDate.getMinutes();
         const paddedMinute = `${minute}`.padStart(2, '0');
