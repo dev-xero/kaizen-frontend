@@ -2,11 +2,10 @@
 
 import { ScreenContext } from '@/context/screen/screen.context';
 import { screen } from '@/context/screen/screens';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 
 import MainView from '@/components/mainview';
 import Sidebar from '@/components/sidebar';
-// import ScreenProvider from '@/context/screen/screen.provider';
 import OpenSourceView from '@/views/opensource.view';
 import PersonalView from '@/views/personal.view';
 import SettingsView from '@/views/settings.view';
@@ -14,6 +13,7 @@ import TeamsView from '@/views/teams.view';
 
 export default function HomeFragment() {
     const { currentScreen } = useContext(ScreenContext);
+    const [isOpen, setIsOpen] = useState(false);
 
     let screenComponent: JSX.Element | null = null;
     switch (currentScreen) {
@@ -39,9 +39,13 @@ export default function HomeFragment() {
     }
 
     return (
-        <main className="grid grid-cols-6 w-full">
-            <Sidebar />
-            <MainView screen={screenComponent} />
+        <main className="relative sm:grid grid-cols-6 w-full">
+            <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+            <MainView
+                screen={screenComponent}
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+            />
         </main>
     );
 }

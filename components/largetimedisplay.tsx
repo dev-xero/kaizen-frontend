@@ -9,10 +9,10 @@ export default function LargeTimeDisplay() {
         const interval = setInterval(() => {
             setCurrDate(new Date()); // Update to the current time
         }, 1000); // Update every second
-    
+
         return () => clearInterval(interval);
     }, []);
-        
+
     function formatTime(currDate: Date): string {
         const minute = currDate.getMinutes();
         const paddedMinute = `${minute}`.padStart(2, '0');
@@ -42,6 +42,7 @@ export default function LargeTimeDisplay() {
                 alt=""
                 width={120}
                 height={220}
+                priority={true}
                 className="absolute left-[-32px] bottom-[-20px]"
             />
             <section className="w-full flex flex-col items-center justify-center h-full">
