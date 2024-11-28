@@ -44,8 +44,8 @@ export default function OpenSourceView() {
             <div className="bg-gray-900 p-4 py-8 my-4 text-center rounded-md jigsaw">
                 <h2 className="font-bold text-2xl text-white">Open Source</h2>
             </div>
-            <h2 className="text-2xl font-bold mb-2">About Kaizen</h2>
-            <p className="text-gray-700 text-lg">
+            <h2 className="text-xl font-bold mb-2">About Kaizen</h2>
+            <p className="text-gray-700">
                 Kaizen is an Open Source web application that makes creating and
                 managing tasks a breeze with an intuitive yet minimal interface.
                 Kaizen would not have been possible without the various open
