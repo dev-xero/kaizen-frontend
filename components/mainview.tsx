@@ -19,7 +19,7 @@ export default function MainView({ screen, isOpen, setIsOpen }: MainViewProps) {
     return (
         <main className="w-full col-span-5">
             <MobileHeader setIsOpen={setIsOpen} />
-            <section className="col-span-5 sm:min-h-screen w-full bg-[#ECEDEF] mt-16 sm:mt-0 p-2 sm:p-4">
+            <section className="col-span-5 min-h-screen w-full bg-[#ECEDEF] mt-16 sm:mt-0 p-2 sm:p-4">
                 {screen}
             </section>
         </main>

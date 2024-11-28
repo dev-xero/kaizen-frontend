@@ -22,7 +22,7 @@ function TaskPlaceholder() {
 
 export default function DroppableColumn(props: DroppableColumnProps) {
     return (
-        <section className="flex flex-col gap-2 w-full font-[family-name:var(--font-geist-sans)]">
+        <section className="flex flex-col gap-2 w-[300px] flex-shrink-0 font-[family-name:var(--font-geist-sans)]">
             <header className="p-2 flex items-center justify-between text-sm bg-[#ECEDEF] rounded-sm">
                 <span>{props.title}</span>
                 <span className="text-gray-700 text-xs">

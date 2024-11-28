@@ -62,7 +62,7 @@ export default function KanbanBoard() {
     return (
         <section className="my-2">
             <DragDropContext onDragEnd={handleDragEnd}>
-                <section className="p-4 w-full border border-[#D4D5D6] rounded-md bg-white flex gap-2">
+                <section className="p-4 w-full border border-[#cacbcb] rounded-md bg-white flex gap-2">
                     <DroppableColumn
                         title="To-Do"
                         tasks={tasks['todo']}
