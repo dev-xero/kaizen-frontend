@@ -41,7 +41,10 @@ const openSourceLibraries = [
 export default function OpenSourceView() {
     return (
         <section className="font-[family-name:var(--font-geist-sans)]">
-            <h2 className="text-2xl font-bold mb-2">Open Source</h2>
+            <div className="bg-gray-900 p-4 py-8 my-4 text-center rounded-md jigsaw">
+                <h2 className="font-bold text-2xl text-white">Open Source</h2>
+            </div>
+            <h2 className="text-2xl font-bold mb-2">About Kaizen</h2>
             <p className="text-gray-700 text-lg">
                 Kaizen is an Open Source web application that makes creating and
                 managing tasks a breeze with an intuitive yet minimal interface.
@@ -82,12 +85,12 @@ export default function OpenSourceView() {
             <section className="my-6">
                 <p className="text-xl font-bold">Contribute to Kaizen</p>
                 <p className="text-gray-700 my-2">
-                    Kaizen is a collaborative project currently maintained by{' '}
+                    Kaizen is a project currently maintained by{' '}
                     <a href="https://github.com/dev-xero" target="_blank" className="underline underline-offset-4">
                         Xero
                     </a>
                     . If you&apos;d like to contribute, report issues, or
-                    suggest improvements, visit our GitHub repository.
+                    suggest improvements, visit the GitHub repository.
                 </p>
                 <a
                     href="https://github.com/dev-xero/kaizen-frontend"
