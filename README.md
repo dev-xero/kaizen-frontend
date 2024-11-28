@@ -1,9 +1,7 @@
 # Kaizen 改 善 
 
 ![](https://img.shields.io/github/license/dev-xero/kaizen-frontend?style=for-the-badge&colorA=131820&colorB=FFFFFF&logo=markdown)
-
 ![](https://img.shields.io/npm/v/@nestjs/core.svg?style=for-the-badge&colorA=131820&colorB=FFFFFF&logo=markdown)
-
 ![](https://img.shields.io/github/deployments/dev-xero/kaizen-frontend/production?style=for-the-badge&logo=vercel&label=DEPLOYMENT&labelColor=%23131820&color=%2364fab6)
 
 
