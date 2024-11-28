@@ -101,6 +101,7 @@ function LoginForm() {
             displayErrorMessage(
                 'Your password should be at least eight characters long.'
             );
+            return;
         }
 
         loginMutation.mutate({ email, password });

@@ -50,6 +50,7 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
 
     function setActiveView(to: screen) {
         setCurrentScreen(to);
+        setIsOpen(() => false);
     }
 
     return (

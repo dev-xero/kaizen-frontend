@@ -12,6 +12,14 @@ type DroppableColumnProps = {
     id: string;
 };
 
+function NewTaskCard() {
+    return (
+        <section className="p-2 border-2 border-dashed border-[#c9ceda] rounded-md cursor-pointer text-center hover:border-gray-500 transition">
+            New Task
+        </section>
+    );
+}
+
 function TaskPlaceholder() {
     return (
         <section className="w-full h-[240px] flex items-center justify-center">
@@ -56,7 +64,7 @@ export default function DroppableColumn(props: DroppableColumnProps) {
                                 ))
                             )}
                         </div>
-                        {provided.placeholder}
+                        <NewTaskCard />
                     </TasksList>
                 )}
             </Droppable>

@@ -26,12 +26,12 @@ export const metadata: Metadata = {
         locale: 'en_US',
         type: 'website',
         images: {
-            url: 'https://kaizenweb.vercel.app/opengraph.png',
+            url: 'https://kaizen.com.ng/opengraph.png',
             width: 1200,
             height: 630,
         },
     },
-    metadataBase: new URL('https://kaizenweb.vercel.app'),
+    metadataBase: new URL('https://kaizen.com.ng'),
 };
 
 export default function RootLayout({

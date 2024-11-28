@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import { DragDropContext, DropResult } from '@hello-pangea/dnd';
 import { useState } from 'react';
 import DroppableColumn from './droppablecolumn';
 import Task from '@/types/task.type';
+import NewTaskModal from '../newtaskmodal';
 
 type TasksState = {
     todo: Task[];
@@ -13,6 +15,7 @@ type TasksState = {
 };
 
 export default function KanbanBoard() {
+    const [showTaskModal, setShowTaskModal] = useState(true);
     const [tasks, setTasks] = useState<TasksState>({
         todo: [
             {
@@ -30,6 +33,10 @@ export default function KanbanBoard() {
         testing: [],
         completed: [],
     });
+
+    // function addTaskTo(task: Task, id: string) {
+
+    // }
 
     function handleDragEnd(result: DropResult) {
         const { source, destination } = result;
@@ -61,6 +68,7 @@ export default function KanbanBoard() {
 
     return (
         <section className="my-2">
+            {showTaskModal && <NewTaskModal />}
             <DragDropContext onDragEnd={handleDragEnd}>
                 <section className="p-4 w-full border border-[#cacbcb] rounded-md bg-white flex gap-2">
                     <DroppableColumn
