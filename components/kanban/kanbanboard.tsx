@@ -68,7 +68,7 @@ export default function KanbanBoard() {
 
     return (
         <section className="my-2">
-            {showTaskModal && <NewTaskModal />}
+            {/* {showTaskModal && <NewTaskModal />} */}
             <DragDropContext onDragEnd={handleDragEnd}>
                 <section className="p-4 w-full border border-[#cacbcb] rounded-md bg-white flex gap-2">
                     <DroppableColumn
