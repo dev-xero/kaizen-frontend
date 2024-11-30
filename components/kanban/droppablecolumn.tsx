@@ -50,7 +50,7 @@ export default function DroppableColumn(props: DroppableColumnProps) {
                         >
                             {props.tasks.length == 0 ? (
                                 snapshot.isDraggingOver ? (
-                                    <div></div>
+                                    <div className="w-full h-[140px]"></div>
                                 ) : (
                                     <TaskPlaceholder />
                                 )
