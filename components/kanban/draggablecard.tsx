@@ -25,11 +25,9 @@ const TaskCard = forwardRef<HTMLElement, TaskCardProps>((props, ref) => {
             )}
             {...rest} // Pass draggableProps and dragHandleProps
         >
-            <h4 className="mb-4 text-sm text-gray-700">{props.idx+1}</h4>
-            <h3 className="text font-bold text-[#12111A] mb-2">
-                {task.title}
-            </h3>
-            <p className="text-gray-700 text-sm">{task.summary}</p>
+            <h4 className="mb-4 text-sm text-gray-700">{props.idx + 1}</h4>
+            <h3 className="text font-bold text-[#12111A] mb-2">{task.name}</h3>
+            <p className="text-gray-700 text-sm">{task.description}</p>
         </section>
     );
 });
@@ -39,7 +37,7 @@ TaskCard.displayName = 'TaskCard';
 export default function DraggableTask(props: DraggableTaskProps) {
     return (
         <Draggable
-            draggableId={props.task.id}
+            draggableId={props.task.id as string}
             key={props.task.id}
             index={props.idx}
         >

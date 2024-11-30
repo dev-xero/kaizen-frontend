@@ -64,6 +64,7 @@ export default function DroppableColumn(props: DroppableColumnProps) {
                                 ))
                             )}
                         </div>
+                        {provided.placeholder}
                         <NewTaskCard />
                     </TasksList>
                 )}

@@ -16,9 +16,11 @@ import env from '@/config/environment';
 import keys from '@/config/keys';
 import NetworkConfig from '@/config/network';
 import { getAccessToken } from '@/util/access';
+import { UserContext } from '@/context/user/user.context';
 
 export default function HomeFragment() {
     const { currentScreen } = useContext(ScreenContext);
+    const { setLoggedInUser} = useContext(UserContext);
     const [isOpen, setIsOpen] = useState(false);
 
     let screenComponent: JSX.Element | null = null;
@@ -82,12 +84,19 @@ export default function HomeFragment() {
                 const cachedDataString = JSON.stringify(data.data);
                 localStorage.setItem(keys.userKey, cachedDataString);
                 localStorage.setItem(keys.cacheTimeKey, Date.now().toString()); // save last request time
+
+                setLoggedInUser(data.data);
             } catch {
-                window.location.href = '/auth/login';
+                // we should inform the user that we couldn't make the request, using
+                // a notification library
             }
         }
 
         async function updateUserData() {
+            if (!localStorage.getItem(keys.userKey)) {
+                window.location.href = '/auth/login'
+            }
+
             if (!localStorage.getItem(keys.cacheTimeKey)) {
                 // If we don't have a cache time saved at all, make a full request.
                 console.log(
@@ -110,6 +119,9 @@ export default function HomeFragment() {
                     makeFullRequest();
                     console.log("[CACHE]: completed.")
                 } else {
+                    const savedUser = localStorage.getItem(keys.userKey)!;
+                    const parsedUser = JSON.parse(savedUser);
+                    setLoggedInUser(parsedUser);
                     console.log('[CACHE]: hit, not performing full request.');
                 }
             }
