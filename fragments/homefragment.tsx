@@ -87,6 +87,7 @@ export default function HomeFragment() {
 
                 setLoggedInUser(data.data);
             } catch {
+                // TODO:
                 // we should inform the user that we couldn't make the request, using
                 // a notification library
             }

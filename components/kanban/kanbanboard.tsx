@@ -8,6 +8,8 @@ import DroppableColumn from './droppablecolumn';
 import Task from '@/types/task.type';
 import NewTaskModal from '../newtaskmodal';
 import { UserContext } from '@/context/user/user.context';
+import { User } from '@/types/user.type';
+import keys from '@/config/keys';
 
 type TasksState = {
     todo: Task[];
@@ -25,9 +27,11 @@ export default function KanbanBoard() {
     };
 
     const { loggedInUser } = useContext(UserContext);
+
     const [isLoading, setIsLoading] = useState(true);
     const [showTaskModal, setShowTaskModal] = useState(false);
     const [tasks, setTasks] = useState<TasksState>(defaultTaskState);
+    const [userCreds, setUserCreds] = useState<Partial<User> | null>(null);
 
     const debouncedUpdateDatabase = useRef(
         debounce(updateTasksInDatabase, 1000)
@@ -86,6 +90,24 @@ export default function KanbanBoard() {
     // Delay database I/O to improve performance.
     async function updateTasksInDatabase(updatedTasks: TasksState) {
         try {
+            let credentials = {};
+
+            if (!userCreds) {
+                const storedUser = localStorage.getItem(keys.userKey);
+
+                if (storedUser) {
+                    const parsedUser = JSON.parse(storedUser);
+
+                    credentials = {
+                        id: parsedUser.id,
+                        username: parsedUser.username,
+                    };
+                } else {
+                    // TODO: notify the user about the error, then redirect.
+                    return;
+                }
+            }
+
             // Map-reduce task ids into numbers
             const convertedTasks = Object.entries(updatedTasks).reduce(
                 (acc, [key, tasks]) => {
@@ -106,7 +128,9 @@ export default function KanbanBoard() {
                 ...convertedTasks.completed,
             ];
 
+            console.log('logged in user creds:', credentials);
             console.log('current tasks state after debounce:', tasksRequestDTO);
+            // console.log('logged in user creds:', loggedInUserCreds);
             // await fetch('/api/tasks/update', {
             //     method: 'POST',
             //     body: JSON.stringify(updatedTasks),
@@ -138,7 +162,7 @@ export default function KanbanBoard() {
                 const [movedTask] = sourceTasks.splice(source.index, 1);
 
                 // Check if dragged to completed and update accordingly
-                movedTask.isCompleted = destination.droppableId == "completed"
+                movedTask.isCompleted = destination.droppableId == 'completed';
 
                 sourceTasks.splice(destination.index, 0, movedTask);
 
@@ -155,7 +179,7 @@ export default function KanbanBoard() {
             const destinationTasks = Array.from(prevTasks[destinationKey]);
             const [movedTask] = sourceTasks.splice(source.index, 1);
 
-            movedTask.isCompleted = destination.droppableId == "completed"
+            movedTask.isCompleted = destination.droppableId == 'completed';
 
             const updatedTask = {
                 ...movedTask,
@@ -178,11 +202,21 @@ export default function KanbanBoard() {
     }
 
     useEffect(() => {
+        if (!loggedInUser) return;
         if (loggedInUser?.tasks && Array.isArray(loggedInUser.tasks)) {
+            setUserCreds({
+                id: loggedInUser.id,
+                username: loggedInUser.username,
+            });
             organizeKanbanTasks(loggedInUser.tasks);
-            setIsLoading(false);
         }
     }, [loggedInUser]);
+
+    useEffect(() => {
+        if (userCreds) {
+            setIsLoading(false);
+        }
+    }, [userCreds]);
 
     // Show nothing while loading
     if (isLoading) {
