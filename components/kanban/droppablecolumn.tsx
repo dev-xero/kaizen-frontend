@@ -14,7 +14,7 @@ type DroppableColumnProps = {
 
 function NewTaskCard() {
     return (
-        <section className="p-2 border-2 border-dashed border-[#c9ceda] rounded-md cursor-pointer text-center hover:border-gray-500 transition">
+        <section className="p-2 border-2 border-dashed border-[#c9ceda] rounded-md cursor-pointer text-center hover:border-gray-500 transition text-gray-700 hover:text-gray-950">
             New Task
         </section>
     );

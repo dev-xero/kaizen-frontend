@@ -58,18 +58,22 @@ export default function KanbanBoard() {
 
             switch (task.category) {
                 case 'TODO':
+                    kanbanTask.isCompleted = false;
                     todo.push(kanbanTask);
                     break;
 
                 case 'IN_PROGRESS':
+                    kanbanTask.isCompleted = false;
                     progress.push(kanbanTask);
                     break;
 
                 case 'TESTING':
+                    kanbanTask.isCompleted = false;
                     testing.push(kanbanTask);
                     break;
 
                 case 'COMPLETED':
+                    kanbanTask.isCompleted = true;
                     completed.push(kanbanTask);
                     break;
             }
@@ -82,7 +86,27 @@ export default function KanbanBoard() {
     // Delay database I/O to improve performance.
     async function updateTasksInDatabase(updatedTasks: TasksState) {
         try {
-            console.log('current tasks state after debounce:', updatedTasks);
+            // Map-reduce task ids into numbers
+            const convertedTasks = Object.entries(updatedTasks).reduce(
+                (acc, [key, tasks]) => {
+                    acc[key as keyof TasksState] = tasks.map((task) => ({
+                        ...task,
+                        id: parseInt(task.id as string, 10),
+                    }));
+                    return acc;
+                },
+                {} as TasksState
+            );
+
+            // Spread everything into a singular array
+            const tasksRequestDTO: Task[] = [
+                ...convertedTasks.todo,
+                ...convertedTasks.progress,
+                ...convertedTasks.testing,
+                ...convertedTasks.completed,
+            ];
+
+            console.log('current tasks state after debounce:', tasksRequestDTO);
             // await fetch('/api/tasks/update', {
             //     method: 'POST',
             //     body: JSON.stringify(updatedTasks),
@@ -96,7 +120,8 @@ export default function KanbanBoard() {
     function handleDragEnd(result: DropResult) {
         const { source, destination } = result;
 
-        if (!destination || source.droppableId === destination.droppableId) {
+        // If no destination, do nothing
+        if (!destination) {
             return;
         }
 
@@ -107,33 +132,46 @@ export default function KanbanBoard() {
             );
 
             const sourceTasks = Array.from(prevTasks[sourceKey]);
-            const destinationTasks = Array.from(prevTasks[destinationKey]);
 
-            // Find and remove the task from the source.
+            // Dragging within the same column
+            if (sourceKey == destinationKey) {
+                const [movedTask] = sourceTasks.splice(source.index, 1);
+
+                // Check if dragged to completed and update accordingly
+                movedTask.isCompleted = destination.droppableId == "completed"
+
+                sourceTasks.splice(destination.index, 0, movedTask);
+
+                const updatedTasks = {
+                    ...prevTasks,
+                    [sourceKey]: sourceTasks,
+                };
+
+                debouncedUpdateDatabase(updatedTasks);
+                return updatedTasks;
+            }
+
+            // Dragging to a different column
+            const destinationTasks = Array.from(prevTasks[destinationKey]);
             const [movedTask] = sourceTasks.splice(source.index, 1);
 
-            // Singular updated task.
+            movedTask.isCompleted = destination.droppableId == "completed"
+
             const updatedTask = {
                 ...movedTask,
                 category:
                     destination.droppableId.toUpperCase() as Task['category'],
             };
 
-            // Add the task to the destination.
             destinationTasks.splice(destination.index, 0, updatedTask);
 
-            // New tasks state as-is.
             const newTasks = {
                 ...prevTasks,
                 [sourceKey]: sourceTasks,
                 [destinationKey]: destinationTasks,
             };
 
-            /**
-             * We will not update the database immediately since it'll trigger requests
-                for each drag/drop and sink app performance. 
-             */
-            debouncedUpdateDatabase(updateTasksInDatabase);
+            debouncedUpdateDatabase(newTasks);
 
             return newTasks;
         });
