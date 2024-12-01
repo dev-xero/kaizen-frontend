@@ -8,8 +8,18 @@ import DroppableColumn from './droppablecolumn';
 import Task from '@/types/task.type';
 import NewTaskModal from '../newtaskmodal';
 import { UserContext } from '@/context/user/user.context';
-import { User } from '@/types/user.type';
 import keys from '@/config/keys';
+import axios from 'axios';
+import env from '@/config/environment';
+import NetworkConfig from '@/config/network';
+import { getAccessToken } from '@/util/access';
+import { debounce } from '@/util/debounce';
+import { useUserData } from '@/hooks/useUserData';
+
+type Credential = {
+    id: number;
+    username: string;
+};
 
 type TasksState = {
     todo: Task[];
@@ -28,23 +38,15 @@ export default function KanbanBoard() {
 
     const { loggedInUser } = useContext(UserContext);
 
-    const [isLoading, setIsLoading] = useState(true);
+    const { isLoading, user } = useUserData();
+
+    const [isOrganizingTasks, setIsOrganizingTasks] = useState(true);
     const [showTaskModal, setShowTaskModal] = useState(false);
     const [tasks, setTasks] = useState<TasksState>(defaultTaskState);
-    const [userCreds, setUserCreds] = useState<Partial<User> | null>(null);
 
     const debouncedUpdateDatabase = useRef(
         debounce(updateTasksInDatabase, 1000)
     ).current;
-
-    // Delays function calls by some milliseconds.
-    function debounce(func: Function, delay: number) {
-        let timer: NodeJS.Timeout;
-        return (...args: unknown[]) => {
-            clearTimeout(timer);
-            timer = setTimeout(() => func(...args), delay);
-        };
-    }
 
     // Sort and organize these tasks into their arrays.
     function organizeKanbanTasks(tasks: Task[]) {
@@ -84,24 +86,22 @@ export default function KanbanBoard() {
         }
 
         setTasks({ todo, progress, testing, completed });
-        setIsLoading(false);
+        setIsOrganizingTasks(false);
     }
 
     // Delay database I/O to improve performance.
     async function updateTasksInDatabase(updatedTasks: TasksState) {
-        try {
-            let credentials = {};
+        const credentials: Credential = { id: 0, username: '' };
 
-            if (!userCreds) {
+        try {
+            if (!user) {
                 const storedUser = localStorage.getItem(keys.userKey);
 
                 if (storedUser) {
                     const parsedUser = JSON.parse(storedUser);
 
-                    credentials = {
-                        id: parsedUser.id,
-                        username: parsedUser.username,
-                    };
+                    credentials.id = parsedUser.id;
+                    credentials.username = parsedUser.username;
                 } else {
                     // TODO: notify the user about the error, then redirect.
                     return;
@@ -128,14 +128,37 @@ export default function KanbanBoard() {
                 ...convertedTasks.completed,
             ];
 
-            console.log('logged in user creds:', credentials);
-            console.log('current tasks state after debounce:', tasksRequestDTO);
-            // console.log('logged in user creds:', loggedInUserCreds);
-            // await fetch('/api/tasks/update', {
-            //     method: 'POST',
-            //     body: JSON.stringify(updatedTasks),
-            //     headers: { 'Content-Type': 'application/json' },
-            // });
+            try {
+                const accessToken = await getAccessToken(
+                    credentials.id,
+                    credentials.username
+                );
+
+                if (!accessToken) {
+                    throw new Error('Missing access token.');
+                }
+
+                const res = await axios.patch(
+                    `${env.api}/tasks/personal/${credentials.username}`,
+                    {
+                        tasks: tasksRequestDTO,
+                    },
+                    {
+                        headers: {
+                            ...NetworkConfig.headers,
+                            Authorization: `Bearer ${accessToken}`,
+                        },
+                    }
+                );
+
+                if (res.status == 200) {
+                    console.log('database in sync, update successful.');
+                    localStorage.setItem(keys.forceUpdateKey, 'true');
+                }
+            } catch (err) {
+                // TODO: notify the user.
+                console.error(err);
+            }
         } catch (error) {
             console.error('Error updating tasks:', error);
         }
@@ -202,24 +225,29 @@ export default function KanbanBoard() {
     }
 
     useEffect(() => {
-        if (!loggedInUser) return;
+        // first try to get tasks from loggedInUser
         if (loggedInUser?.tasks && Array.isArray(loggedInUser.tasks)) {
-            setUserCreds({
-                id: loggedInUser.id,
-                username: loggedInUser.username,
-            });
             organizeKanbanTasks(loggedInUser.tasks);
+            return;
         }
-    }, [loggedInUser]);
 
-    useEffect(() => {
-        if (userCreds) {
-            setIsLoading(false);
+        // if loggedInUser doesn't have tasks, try to get from localStorage
+        const storedUserString = localStorage.getItem(keys.userKey);
+
+        if (storedUserString) {
+            try {
+                const storedUser = JSON.parse(storedUserString);
+                if (storedUser.tasks && Array.isArray(storedUser.tasks)) {
+                    organizeKanbanTasks(storedUser.tasks);
+                }
+            } catch (error) {
+                window.location.href = '/auth/login'
+            }
         }
-    }, [userCreds]);
+    }, [loggedInUser, user, isLoading]);
 
     // Show nothing while loading
-    if (isLoading) {
+    if (isLoading || isOrganizingTasks) {
         return <></>;
     }
 
