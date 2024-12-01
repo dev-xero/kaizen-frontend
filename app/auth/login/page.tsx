@@ -45,6 +45,7 @@ function LoginForm() {
         const { accessToken, refreshToken, ...user } = res.data;
 
         localStorage.setItem(keys.userKey, JSON.stringify(user));
+        localStorage.setItem(keys.forceUpdateKey, 'true');
 
         // Save access token key - TTL 1hr
         setCookie(keys.accessTokenKey, accessToken, {

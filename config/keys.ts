@@ -3,7 +3,8 @@ const keys = {
     accessTokenKey: '_c-acc',
     refreshTokenKey: '_c-ref',
     userKey: '_uxw',
-    cacheTimeKey: '_xcache'
+    cacheTimeKey: '_xcache',
+    forceUpdateKey: '_force-update'
 };
 
 export default keys;

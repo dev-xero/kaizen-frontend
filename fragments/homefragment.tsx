@@ -20,7 +20,7 @@ import { UserContext } from '@/context/user/user.context';
 
 export default function HomeFragment() {
     const { currentScreen } = useContext(ScreenContext);
-    const { setLoggedInUser} = useContext(UserContext);
+    const { setLoggedInUser } = useContext(UserContext);
     const [isOpen, setIsOpen] = useState(false);
 
     let screenComponent: JSX.Element | null = null;
@@ -82,6 +82,7 @@ export default function HomeFragment() {
                 );
 
                 const cachedDataString = JSON.stringify(data.data);
+                localStorage.setItem(keys.forceUpdateKey, 'false');
                 localStorage.setItem(keys.userKey, cachedDataString);
                 localStorage.setItem(keys.cacheTimeKey, Date.now().toString()); // save last request time
 
@@ -95,7 +96,7 @@ export default function HomeFragment() {
 
         async function updateUserData() {
             if (!localStorage.getItem(keys.userKey)) {
-                window.location.href = '/auth/login'
+                window.location.href = '/auth/login';
             }
 
             if (!localStorage.getItem(keys.cacheTimeKey)) {
@@ -104,26 +105,39 @@ export default function HomeFragment() {
                     '[CACHE]: miss, performing full request, not cached.'
                 );
                 makeFullRequest();
-                console.log("[CACHE]: completed.")
+                console.log('[CACHE]: completed.');
             } else {
-                // If the last cache time difference is more than 5 mins, make a full request.
-                const FIVE_MINS_MS = 5 * 60 * 1000;
-                const diff =
-                    Date.now() -
-                    parseInt(
-                        localStorage.getItem(keys.cacheTimeKey) ?? '0',
-                        10
-                    );
+                // If the force update flag isn't set to true, we can skip full refresh
+                const shouldSkipUpdate =
+                    localStorage.getItem(keys.forceUpdateKey) &&
+                    localStorage.getItem(keys.forceUpdateKey) == 'false';
 
-                if (diff > FIVE_MINS_MS) {
-                    console.log('[CACHE]: miss, performing full request.');
+                if (!shouldSkipUpdate) {
+                    console.log('[CACHE]: miss, making forced request.');
                     makeFullRequest();
-                    console.log("[CACHE]: completed.")
+                    console.log('[CACHE]: completed.');
                 } else {
-                    const savedUser = localStorage.getItem(keys.userKey)!;
-                    const parsedUser = JSON.parse(savedUser);
-                    setLoggedInUser(parsedUser);
-                    console.log('[CACHE]: hit, not performing full request.');
+                    // If the last cache time difference is more than 5 mins, make a full request.
+                    const FIVE_MINS_MS = 5 * 60 * 1000;
+                    const diff =
+                        Date.now() -
+                        parseInt(
+                            localStorage.getItem(keys.cacheTimeKey) ?? '0',
+                            10
+                        );
+
+                    if (diff > FIVE_MINS_MS) {
+                        console.log('[CACHE]: miss, performing full request.');
+                        makeFullRequest();
+                        console.log('[CACHE]: completed.');
+                    } else {
+                        const savedUser = localStorage.getItem(keys.userKey)!;
+                        const parsedUser = JSON.parse(savedUser);
+                        setLoggedInUser(parsedUser);
+                        console.log(
+                            '[CACHE]: hit, not performing full request.'
+                        );
+                    }
                 }
             }
         }
