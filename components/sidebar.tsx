@@ -57,7 +57,7 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
         <>
             <aside
                 className={clsx(
-                    'fixed top-0 sm:static col-span-1 border-r border-r-[#D4D5D6] h-dvh py-4 z-[999] bg-white max-w-[280px] sm:max-w-full w-full',
+                    'fixed top-0 sm:static col-span-1 border-r border-r-[#D4D5D6] py-4 z-[999] bg-white max-w-[280px] sm:max-w-full w-full min-h-screen',
                     'transition-transform duration-300 ease-in-out transform sm:!translate-x-0',
                     isOpen ? 'translate-x-0' : 'translate-x-[-300px]'
                 )}

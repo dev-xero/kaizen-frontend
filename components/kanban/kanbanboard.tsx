@@ -256,6 +256,14 @@ export default function KanbanBoard() {
         }
     }, [loggedInUser, user, isLoading]);
 
+    // useEffect(() => {
+    //     if (showTaskModal) {
+    //         document.body.style.overflow = 'hidden';
+    //     } else {
+    //         document.body.style.overflow = 'unset';
+    //     }
+    // }, [showTaskModal]);
+
     // Show nothing while loading
     if (isLoading || isOrganizingTasks) {
         return (
