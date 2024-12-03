@@ -1,8 +1,10 @@
+import { Category } from '@/constants/categories';
+
 type Task = {
     id: number | string;
     name: string;
     description: string;
-    category: "TODO" | "IN_PROGRESS" | "TESTING" | "COMPLETED";
+    category: Category;
     isCompleted: boolean;
     createdAt: Date;
     dueOn: Date;

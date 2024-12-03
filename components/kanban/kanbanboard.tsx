@@ -15,6 +15,8 @@ import NetworkConfig from '@/config/network';
 import { getAccessToken } from '@/util/access';
 import { debounce } from '@/util/debounce';
 import { useUserData } from '@/hooks/useUserData';
+import { Category } from '@/constants/categories';
+import { DarkSpinner } from '../spinner';
 
 type Credential = {
     id: number;
@@ -39,7 +41,7 @@ export default function KanbanBoard() {
     const { loggedInUser } = useContext(UserContext);
     const { isLoading, user } = useUserData();
 
-    const [activeColumn, setActiveColumn] = useState('');
+    const [activeColumn, setActiveColumn] = useState<Category>('TODO');
     const [isOrganizingTasks, setIsOrganizingTasks] = useState(true);
     const [showTaskModal, setShowTaskModal] = useState(false);
     const [tasks, setTasks] = useState<TasksState>(defaultTaskState);
@@ -229,7 +231,7 @@ export default function KanbanBoard() {
     function showNewTaskModalForId(id: string) {
         console.log('active column set to:', id);
         setShowTaskModal(true);
-        setActiveColumn(id);
+        setActiveColumn(id.toUpperCase() as Category);
     }
 
     useEffect(() => {
@@ -256,12 +258,19 @@ export default function KanbanBoard() {
 
     // Show nothing while loading
     if (isLoading || isOrganizingTasks) {
-        return <></>;
+        return (
+            <h4 className="text-gray-700 flex gap-2 items-center justify-center">
+                <DarkSpinner />
+                Getting your tasks.
+            </h4>
+        );
     }
 
     return (
         <section className="my-2">
-            {showTaskModal && <NewTaskModal />}
+            {showTaskModal && (
+                <NewTaskModal active={activeColumn as Category} />
+            )}
             <DragDropContext onDragEnd={handleDragEnd}>
                 <section className="p-4 w-full border border-[#cacbcb] rounded-md bg-white flex gap-2">
                     <DroppableColumn
