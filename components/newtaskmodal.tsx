@@ -2,7 +2,7 @@ import categories, { Category } from '@/constants/categories';
 import { cn } from '@/lib/utils';
 import { Calendar as CalendarIcon } from '@phosphor-icons/react';
 import { format } from 'date-fns';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
@@ -31,10 +31,13 @@ type NewTaskModalProps = {
 
 function CategoryMenu(props: CategoryMenuProps) {
     return (
-        <Select defaultValue={props.defaultCategory} value={props.selectedOption}
-        onValueChange={(value) => {
-            props.setSelectedOption(value as Category);
-        }}>
+        <Select
+            defaultValue={props.defaultCategory}
+            value={props.selectedOption}
+            onValueChange={(value) => {
+                props.setSelectedOption(value as Category);
+            }}
+        >
             <SelectTrigger className="w-full shadow-sm focus-visible:border-indigo-500 rounded-md focus:ring-1 focus-visible:ring-1 focus:ring-indigo-100 focus:!outline-none focus-visible:ring-indigo-100">
                 <SelectValue placeholder="Category" />
             </SelectTrigger>
@@ -50,11 +53,22 @@ function CategoryMenu(props: CategoryMenuProps) {
 }
 
 export default function NewTaskModal(props: NewTaskModalProps) {
-    const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
-    const [category, setCategory] = useState<Category>(props.active as Category);
+    const [name, setName] = useState('');
+    const [description, setDescription] = useState('');
+    const [category, setCategory] = useState<Category>(
+        props.active as Category
+    );
     const [date, setDate] = useState<Date>();
     const [isCompleted, setIsCompleted] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(true);
+
+    useEffect(() => {
+        if (name && description && date) {
+            setIsDisabled(false);
+        } else {
+            setIsDisabled(true);
+        }
+    }, [name, description, date]);
 
     function composeTaskSpecification() {
         const newTask: Partial<Task> = {
@@ -62,11 +76,11 @@ export default function NewTaskModal(props: NewTaskModalProps) {
             description,
             category,
             isCompleted,
-            createdAt: new Date(),
-            dueOn: date ?? null
-        }
+            createdAt: new Date().toISOString(),
+            dueOn: date?.toISOString(),
+        };
 
-        console.log("composed:", newTask);
+        console.log('composed:', newTask);
     }
 
     return (
@@ -83,7 +97,7 @@ export default function NewTaskModal(props: NewTaskModalProps) {
                         'py-2 border border-gray-300 focus-visible:border-indigo-500 rounded-md focus:ring-2 focus-visible:ring-2 focus:ring-indigo-100 focus:!outline-none focus-visible:ring-indigo-100'
                     )}
                     value={name}
-                    onChange={ev => setName(ev.target.value)}
+                    onChange={(ev) => setName(ev.target.value)}
                 />
 
                 {/* DESCRIPTION */}
@@ -95,11 +109,15 @@ export default function NewTaskModal(props: NewTaskModalProps) {
                         'py-2 border border-gray-300 focus-visible:border-indigo-500 rounded-md focus:ring-2 focus-visible:ring-2 focus:ring-indigo-100 focus:!outline-none focus-visible:ring-indigo-100'
                     )}
                     value={description}
-                    onChange={ev => setDescription(ev.target.value)}
+                    onChange={(ev) => setDescription(ev.target.value)}
                 />
 
                 {/* CATEGORY SELECTOR */}
-                <CategoryMenu defaultCategory={props.active} selectedOption={category} setSelectedOption={option => setCategory(option)} />
+                <CategoryMenu
+                    defaultCategory={props.active}
+                    selectedOption={category}
+                    setSelectedOption={(option) => setCategory(option)}
+                />
 
                 {/* DATE PICKER: Due Date */}
                 <Popover>
@@ -112,11 +130,7 @@ export default function NewTaskModal(props: NewTaskModalProps) {
                             )}
                         >
                             <CalendarIcon size={24} className="text-primary" />
-                            {date ? (
-                                format(date, 'PPP')
-                            ) : (
-                                <span>Due on</span>
-                            )}
+                            {date ? format(date, 'PPP') : <span>Due on</span>}
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0">
@@ -131,14 +145,18 @@ export default function NewTaskModal(props: NewTaskModalProps) {
 
                 {/* IS COMPLETED SWITCH */}
                 <section className="my-2 flex gap-2 items-center">
-                    <Switch onToggle={() => setIsCompleted(prev => !prev)} />
+                    <Switch
+                        checked={isCompleted}
+                        onCheckedChange={() => setIsCompleted((prev) => !prev)}
+                    />
                     <h4>Mark as completed</h4>
                 </section>
 
                 {/* ADD TASK BUTTON */}
                 <Button
                     name="add-btn"
-                    className="bg-indigo-500 font-bold text-xl mt-2 w-full hover:bg-indigo-600 disabled:opacity-90 disabled:cursor-default"
+                    className="bg-indigo-500 font-bold text-xl mt-2 w-full hover:bg-indigo-600 disabled:opacity-90 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-default"
+                    disabled={isDisabled}
                     onClick={composeTaskSpecification}
                 >
                     Add Task

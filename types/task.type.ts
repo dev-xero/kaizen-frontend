@@ -7,8 +7,8 @@ type Task = {
     description: string;
     category: Category;
     isCompleted: boolean;
-    createdAt: Date;
-    dueOn: Date | null;
+    createdAt: string; // date string
+    dueOn: string | null; // date string
     priority?: Priority
 };
 
