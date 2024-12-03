@@ -37,9 +37,9 @@ export default function KanbanBoard() {
     };
 
     const { loggedInUser } = useContext(UserContext);
-
     const { isLoading, user } = useUserData();
 
+    const [activeColumn, setActiveColumn] = useState('');
     const [isOrganizingTasks, setIsOrganizingTasks] = useState(true);
     const [showTaskModal, setShowTaskModal] = useState(false);
     const [tasks, setTasks] = useState<TasksState>(defaultTaskState);
@@ -164,6 +164,7 @@ export default function KanbanBoard() {
         }
     }
 
+    // Runs every time a drag event is recorded.
     function handleDragEnd(result: DropResult) {
         const { source, destination } = result;
 
@@ -224,6 +225,13 @@ export default function KanbanBoard() {
         });
     }
 
+    // Sets the current active modal.
+    function showNewTaskModalForId(id: string) {
+        console.log('active column set to:', id);
+        setShowTaskModal(true);
+        setActiveColumn(id);
+    }
+
     useEffect(() => {
         // first try to get tasks from loggedInUser
         if (loggedInUser?.tasks && Array.isArray(loggedInUser.tasks)) {
@@ -241,7 +249,7 @@ export default function KanbanBoard() {
                     organizeKanbanTasks(storedUser.tasks);
                 }
             } catch (error) {
-                window.location.href = '/auth/login'
+                window.location.href = '/auth/login';
             }
         }
     }, [loggedInUser, user, isLoading]);
@@ -260,21 +268,25 @@ export default function KanbanBoard() {
                         title="To-Do"
                         tasks={tasks['todo']}
                         id="todo"
+                        onNewTaskClicked={(id) => showNewTaskModalForId(id)}
                     />
                     <DroppableColumn
                         title="In Progress"
                         tasks={tasks['progress']}
                         id="in_progress"
+                        onNewTaskClicked={(id) => showNewTaskModalForId(id)}
                     />
                     <DroppableColumn
                         title="Testing"
                         tasks={tasks['testing']}
                         id="testing"
+                        onNewTaskClicked={(id) => showNewTaskModalForId(id)}
                     />
                     <DroppableColumn
                         title="Completed"
                         tasks={tasks['completed']}
                         id="completed"
+                        onNewTaskClicked={(id) => showNewTaskModalForId(id)}
                     />
                 </section>
             </DragDropContext>

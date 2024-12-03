@@ -10,11 +10,20 @@ type DroppableColumnProps = {
     title: string;
     tasks: Task[];
     id: string;
+    onNewTaskClicked: (id: string) => void;
 };
 
-function NewTaskCard() {
+type NewTaskCardProps = {
+    id: string;
+    onClick: (id: string) => void;
+};
+
+function NewTaskCard({ id, onClick }: NewTaskCardProps) {
     return (
-        <section className="p-2 border-2 border-dashed border-[#c9ceda] rounded-md cursor-pointer text-center hover:border-gray-500 transition text-gray-700 hover:text-gray-950">
+        <section
+            className="p-2 border-2 border-dashed border-[#c9ceda] rounded-md cursor-pointer text-center hover:border-gray-500 transition text-gray-700 hover:text-gray-950"
+            onClick={() => onClick(id)}
+        >
             New Task
         </section>
     );
@@ -65,7 +74,10 @@ export default function DroppableColumn(props: DroppableColumnProps) {
                             )}
                         </div>
                         {provided.placeholder}
-                        <NewTaskCard />
+                        <NewTaskCard
+                            id={props.id}
+                            onClick={props.onNewTaskClicked}
+                        />
                     </TasksList>
                 )}
             </Droppable>
