@@ -92,20 +92,24 @@ function LoginForm() {
 
         prepareHandler();
 
-        if (!emailRegex.test(email)) {
-            displayErrorMessage('Please enter a valid email address.');
-            return;
-        }
+        if (email.length > 0 && password.length > 0) {
+            if (!emailRegex.test(email)) {
+                displayErrorMessage('Please enter a valid email address.');
+                return;
+            }
 
-        // Password must be at least 8 chars
-        if (password.trim().length < 8) {
-            displayErrorMessage(
-                'Your password should be at least eight characters long.'
-            );
-            return;
-        }
+            // Password must be at least 8 chars
+            if (password.trim().length < 8) {
+                displayErrorMessage(
+                    'Your password should be at least eight characters long.'
+                );
+                return;
+            }
 
-        loginMutation.mutate({ email, password });
+            loginMutation.mutate({ email, password });
+        } else {
+            setIsDisabled(false);
+        }
     }
 
     return (

@@ -50,6 +50,10 @@ export default function KanbanBoard() {
         debounce(updateTasksInDatabase, 1000)
     ).current;
 
+    const debouncedCreateDBTask = useRef(
+        debounce(createTaskInDatabase, 1000)
+    ).current;
+
     // Sort and organize these tasks into their arrays.
     function organizeKanbanTasks(tasks: Task[]) {
         const todo = [];
@@ -91,11 +95,63 @@ export default function KanbanBoard() {
         setIsOrganizingTasks(false);
     }
 
+    async function createTaskInDatabase(newTask: Partial<Task>) {
+        try {
+            const credentials = { id: 0, username: '' };
+
+            if (!user) {
+                const storedUser = localStorage.getItem(keys.userKey);
+
+                if (storedUser) {
+                    const parsedUser = JSON.parse(storedUser);
+
+                    credentials.id = parsedUser.id;
+                    credentials.username = parsedUser.username;
+                } else {
+                    // TODO: notify the user about the error, then redirect.
+                    return;
+                }
+            }
+
+            const accessToken = await getAccessToken(
+                credentials.id,
+                credentials.username
+            );
+
+            if (!accessToken) {
+                throw new Error('Missing access token.');
+            }
+
+            const { id, ...taskRequestDTO } = newTask;
+
+            const res = await axios.post(
+                `${env.api}/tasks/personal/${credentials.username}`,
+                {
+                    ...taskRequestDTO,
+                },
+                {
+                    headers: {
+                        ...NetworkConfig.headers,
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
+
+            if (res.status == 201) {
+                console.log('database in sync, update successful.');
+                localStorage.setItem(keys.forceUpdateKey, 'true');
+            }
+        } catch (err) {
+            // TODO: Notify the user
+            console.error('Error creating task:', err);
+        }
+    }
+
     // Delay database I/O to improve performance.
     async function updateTasksInDatabase(updatedTasks: TasksState) {
-        const credentials: Credential = { id: 0, username: '' };
-
         try {
+            const credentials: Credential = { id: 0, username: '' };
+
             if (!user) {
                 const storedUser = localStorage.getItem(keys.userKey);
 
@@ -130,38 +186,34 @@ export default function KanbanBoard() {
                 ...convertedTasks.completed,
             ];
 
-            try {
-                const accessToken = await getAccessToken(
-                    credentials.id,
-                    credentials.username
-                );
+            const accessToken = await getAccessToken(
+                credentials.id,
+                credentials.username
+            );
 
-                if (!accessToken) {
-                    throw new Error('Missing access token.');
-                }
+            if (!accessToken) {
+                throw new Error('Missing access token.');
+            }
 
-                const res = await axios.patch(
-                    `${env.api}/tasks/personal/${credentials.username}`,
-                    {
-                        tasks: tasksRequestDTO,
+            const res = await axios.patch(
+                `${env.api}/tasks/personal/${credentials.username}`,
+                {
+                    tasks: tasksRequestDTO,
+                },
+                {
+                    headers: {
+                        ...NetworkConfig.headers,
+                        Authorization: `Bearer ${accessToken}`,
                     },
-                    {
-                        headers: {
-                            ...NetworkConfig.headers,
-                            Authorization: `Bearer ${accessToken}`,
-                        },
-                    }
-                );
-
-                if (res.status == 200) {
-                    console.log('database in sync, update successful.');
-                    localStorage.setItem(keys.forceUpdateKey, 'true');
                 }
-            } catch (err) {
-                // TODO: notify the user.
-                console.error(err);
+            );
+
+            if (res.status == 200) {
+                console.log('database in sync, update successful.');
+                localStorage.setItem(keys.forceUpdateKey, 'true');
             }
         } catch (error) {
+            // TODO: Notify the user
             console.error('Error updating tasks:', error);
         }
     }
@@ -234,6 +286,7 @@ export default function KanbanBoard() {
         setActiveColumn(id.toUpperCase() as Category);
     }
 
+    // Task organization + auth
     useEffect(() => {
         // first try to get tasks from loggedInUser
         if (loggedInUser?.tasks && Array.isArray(loggedInUser.tasks)) {
@@ -256,14 +309,6 @@ export default function KanbanBoard() {
         }
     }, [loggedInUser, user, isLoading]);
 
-    // useEffect(() => {
-    //     if (showTaskModal) {
-    //         document.body.style.overflow = 'hidden';
-    //     } else {
-    //         document.body.style.overflow = 'unset';
-    //     }
-    // }, [showTaskModal]);
-
     // Show nothing while loading
     if (isLoading || isOrganizingTasks) {
         return (
@@ -277,7 +322,54 @@ export default function KanbanBoard() {
     return (
         <section className="my-2">
             {showTaskModal && (
-                <NewTaskModal active={activeColumn as Category} />
+                <NewTaskModal
+                    active={activeColumn as Category}
+                    updateTasks={(task) => {
+                        const consolidatedTask = {
+                            ...task,
+                            id: Math.floor(Math.random() * 1000000).toString(),
+                            dueOn: task.dueOn ?? '9999-12-31T23:59:59.999Z', // NEVER if not specified
+                        };
+
+                        // Prevent redundant additions
+                        setTasks((prev) => {
+                            const columnKey = consolidatedTask.isCompleted
+                                ? 'completed'
+                                : consolidatedTask.category == 'IN_PROGRESS'
+                                ? 'progress'
+                                : (consolidatedTask.category!.toLowerCase() as keyof TasksState);
+
+                            const existingTaskIndex = prev[columnKey].findIndex(
+                                (existingTask) =>
+                                    existingTask.name ===
+                                        consolidatedTask.name &&
+                                    existingTask.description ===
+                                        consolidatedTask.description
+                            );
+
+                            // Task already exists, return previous state
+                            if (existingTaskIndex !== -1) {
+                                return prev;
+                            }
+
+                            const newTasks = {
+                                ...prev,
+                                [columnKey]: [
+                                    ...prev[columnKey],
+                                    consolidatedTask as Task,
+                                ],
+                            };
+
+                            // Debounce db updates
+                            debouncedCreateDBTask(consolidatedTask);
+
+                            return newTasks;
+                        });
+
+                        setShowTaskModal(false);
+                    }}
+                    closeModal={() => setShowTaskModal(false)}
+                />
             )}
             <DragDropContext onDragEnd={handleDragEnd}>
                 <section className="p-4 w-full border border-[#cacbcb] rounded-md bg-white flex gap-2">

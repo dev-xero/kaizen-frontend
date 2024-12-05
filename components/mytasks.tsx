@@ -17,7 +17,8 @@ export default function MyTasks() {
                 <span>My Tasks</span>
             </h2>
             <p className="text-gray-700 text-base sm:text-lg sm:mt-2">
-                These are tasks you&apos;ve set to complete for yourself.
+                Welcome back! These are tasks
+                you&apos;ve set to complete for yourself.
             </p>
             <MyTasksKanbanBoardView />
         </section>

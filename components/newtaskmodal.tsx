@@ -1,6 +1,6 @@
 import categories, { Category } from '@/constants/categories';
 import { cn } from '@/lib/utils';
-import { Calendar as CalendarIcon } from '@phosphor-icons/react';
+import { Calendar as CalendarIcon, X } from '@phosphor-icons/react';
 import { format } from 'date-fns';
 import { useState, useEffect } from 'react';
 import { Button } from './ui/button';
@@ -15,8 +15,8 @@ import {
 } from './ui/select';
 import { Switch } from './ui/switch';
 
-import Modal from './modal';
 import { Calendar } from './ui/calendar';
+import Modal from './modal';
 import Task from '@/types/task.type';
 
 type CategoryMenuProps = {
@@ -27,6 +27,8 @@ type CategoryMenuProps = {
 
 type NewTaskModalProps = {
     active: Category;
+    closeModal: () => void;
+    updateTasks: (newTask: Partial<Task>) => void;
 };
 
 function CategoryMenu(props: CategoryMenuProps) {
@@ -59,16 +61,22 @@ export default function NewTaskModal(props: NewTaskModalProps) {
         props.active as Category
     );
     const [date, setDate] = useState<Date>();
-    const [isCompleted, setIsCompleted] = useState(false);
+    const [isCompleted, setIsCompleted] = useState(props.active == 'COMPLETED');
     const [isDisabled, setIsDisabled] = useState(true);
 
     useEffect(() => {
-        if (name && description && date) {
+        if (name && description) {
             setIsDisabled(false);
         } else {
             setIsDisabled(true);
         }
     }, [name, description, date]);
+
+    useEffect(() => {
+        if (category == 'COMPLETED') {
+            setIsCompleted(true);
+        }
+    }, [category]);
 
     function composeTaskSpecification() {
         const newTask: Partial<Task> = {
@@ -77,14 +85,27 @@ export default function NewTaskModal(props: NewTaskModalProps) {
             category,
             isCompleted,
             createdAt: new Date().toISOString(),
-            dueOn: date?.toISOString(),
+            dueOn: date ? date.toISOString() : null,
         };
 
-        console.log('composed:', newTask);
+        props.updateTasks(newTask);
+
+        // Reset states
+        setName('');
+        setDescription('');
+        setDate(undefined);
+        setIsCompleted(false);
     }
 
     return (
         <Modal>
+            <div
+                className="absolute right-2 top-2 p-2 hover:bg-gray-200 rounded-full cursor-pointer transition-all"
+                onClick={props.closeModal}
+            >
+                <X size={18} />
+            </div>
+
             <h2 className="font-bold text-lg">Add New Task</h2>
             <p className="text-gray-700 mb-4">Add a new task to this column</p>
             <section className="mt-2 flex flex-col gap-2">
