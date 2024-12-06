@@ -1,5 +1,5 @@
 import { Category } from '@/constants/categories';
-import { Priority } from '@/constants/priorities';
+// import { Priority } from '@/constants/priorities';
 
 type Task = {
     id: number | string;
@@ -9,7 +9,6 @@ type Task = {
     isCompleted: boolean;
     createdAt: string; // date string
     dueOn: string | null; // date string
-    priority?: Priority
 };
 
 export default Task;

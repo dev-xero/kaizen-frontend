@@ -335,9 +335,9 @@ export default function KanbanBoard() {
                         setTasks((prev) => {
                             const columnKey = consolidatedTask.isCompleted
                                 ? 'completed'
-                                : consolidatedTask.category == 'IN_PROGRESS'
-                                ? 'progress'
-                                : (consolidatedTask.category!.toLowerCase() as keyof TasksState);
+                                : mapDroppableIdToStateKey(
+                                      consolidatedTask.category!.toLocaleUpperCase()
+                                  );
 
                             const existingTaskIndex = prev[columnKey].findIndex(
                                 (existingTask) =>
@@ -403,7 +403,7 @@ export default function KanbanBoard() {
     );
 }
 
-// -- UTILITIES -- //
+// ----------------------------- UTILITIES ----------------------------------------- //
 
 // Ensure proper format especially for "in_progress"
 function mapDroppableIdToStateKey(droppableId: string): keyof TasksState {

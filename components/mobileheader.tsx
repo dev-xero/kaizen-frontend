@@ -7,7 +7,7 @@ type MobileHeaderProps = {
 
 export default function MobileHeader(props: MobileHeaderProps) {
     return (
-        <header className="flex items-center justify-between p-2 border-l-[#D4D5D6] bg-white/80 backdrop-blur-md  sm:hidden fixed top-0 left-0 z-[996] w-full">
+        <header className="flex items-center justify-between p-2 border-l-[#D4D5D6] bg-white/80 backdrop-blur-md  md:hidden fixed top-0 left-0 z-[996] w-full">
             <h2 className="flex gap-2 items-center justify-center cursor-default pl-2">
                 <Image
                     src="/kaizen-icon.svg"

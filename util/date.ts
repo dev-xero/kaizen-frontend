@@ -34,3 +34,11 @@ export const transformWeekDay = (weekday: number) => {
     ];
     return days[weekday];
 };
+
+export const transformISOToPlain = (date: string): string => {
+    const datePart = date.split('T')[0];
+    const splitDate = datePart.split('-');
+    
+    // idx 0 => year, idx 1 => month, idx 2 => day
+    return `${splitDate[2]}/${splitDate[1]}/${splitDate[0]}`;
+};

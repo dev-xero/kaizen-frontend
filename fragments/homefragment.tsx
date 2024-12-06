@@ -10,11 +10,9 @@ import OpenSourceView from '@/views/opensource.view';
 import PersonalView from '@/views/personal.view';
 import SettingsView from '@/views/settings.view';
 import TeamsView from '@/views/teams.view';
-// import { UserContext } from '@/context/user/user.context';
 
 export default function HomeFragment() {
     const { currentScreen } = useContext(ScreenContext);
-    // const { setLoggedInUser } = useContext(UserContext);
     const [isOpen, setIsOpen] = useState(false);
 
     let screenComponent: JSX.Element | null = null;
@@ -41,7 +39,7 @@ export default function HomeFragment() {
     }
 
     return (
-        <main className="relative sm:grid grid-cols-6 w-full">
+        <main className="relative md:grid grid-cols-6 w-full">
             <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
             <MainView
                 screen={screenComponent}

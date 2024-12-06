@@ -57,8 +57,8 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
         <>
             <aside
                 className={clsx(
-                    'fixed top-0 sm:static col-span-1 border-r border-r-[#D4D5D6] py-4 z-[999] bg-white max-w-[280px] sm:max-w-full w-full min-h-screen',
-                    'transition-transform duration-300 ease-in-out transform sm:!translate-x-0',
+                    'fixed top-0 md:static col-span-1 border-r border-r-[#D4D5D6] py-4 z-[999] bg-white max-w-[280px] md:max-w-full w-full min-h-screen',
+                    'transition-transform duration-300 ease-in-out transform md:!translate-x-0',
                     isOpen ? 'translate-x-0' : 'translate-x-[-300px]'
                 )}
             >
@@ -74,7 +74,7 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
                         <span className="font-bold text-xl">Kaizen</span>
                     </h2>
                     <div
-                        className="cursor-pointer p-2 inline-block sm:hidden"
+                        className="cursor-pointer p-2 inline-block md:hidden"
                         onClick={() => setIsOpen((prev) => !prev)}
                     >
                         <X size={24} className="text-gray-700" />
