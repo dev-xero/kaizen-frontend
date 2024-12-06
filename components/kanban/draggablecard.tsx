@@ -3,29 +3,38 @@ import Task from '@/types/task.type';
 import { Draggable } from '@hello-pangea/dnd';
 import clsx from 'clsx';
 import { transformISOToPlain } from '@/util/date';
+import { Trash } from '@phosphor-icons/react';
 
 type TaskCardProps = {
     task: Task;
     idx: number;
     isDragging?: boolean;
+    onDeleteClicked: (id: string) => void;
 } & React.HTMLProps<HTMLElement>;
 
 type DraggableTaskProps = {
     task: Task;
     idx: number;
+    onClick: (id: string) => void;
 };
 
 const TaskCard = forwardRef<HTMLElement, TaskCardProps>((props, ref) => {
-    const { task, isDragging, ...rest } = props; // Extract props to avoid passing unwanted ones
+    const { task, isDragging, onDeleteClicked, ...rest } = props; // Extract props to avoid passing unwanted ones
     return (
         <section
             ref={ref}
             className={clsx(
-                'p-2 mb-2 border border-[#cbd1dd] bg-white rounded-md font-[family-name:var(--font-geist-sans)]',
+                'p-2 mb-2 border border-[#cbd1dd] bg-white rounded-md font-[family-name:var(--font-geist-sans)] relative group',
                 isDragging && 'bg-slate-300'
             )}
             {...rest} // Pass draggableProps and dragHandleProps
         >
+            <div
+                className="absolute right-2 top-2 cursor-pointer group hidden group-hover:block transition-all text-gray-700 hover:text-red-400"
+                onClick={() => onDeleteClicked(task.id.toString())}
+            >
+                <Trash size={16} />
+            </div>
             <section
                 className={clsx(
                     'border-l-[3px] p-2 pl-4',
@@ -39,12 +48,7 @@ const TaskCard = forwardRef<HTMLElement, TaskCardProps>((props, ref) => {
                 )}
             >
                 <h4 className="mb-4 text-sm text-gray-700">{props.idx + 1}</h4>
-                <h3
-                    className={clsx(
-                        'text font-bold text-[#12111A] mb-2',
-                        task.isCompleted && 'line-through'
-                    )}
-                >
+                <h3 className="text font-bold text-[#12111A] mb-2">
                     {task.name}
                 </h3>
                 <p
@@ -77,6 +81,7 @@ export default function DraggableTask(props: DraggableTaskProps) {
         >
             {(provided, snapshot) => (
                 <TaskCard
+                    onDeleteClicked={props.onClick}
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}

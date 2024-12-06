@@ -48,8 +48,10 @@ export default function OpenSourceView() {
             <p className="text-gray-700">
                 Kaizen is an Open Source web application that makes creating and
                 managing tasks a breeze with an intuitive yet minimal interface.
-                Kaizen would not have been possible without the various open
-                source projects it depends on.
+                You can organize your tasks by status such as todo or completed,
+                drag-and-drop or even delete completed tasks. Kaizen would not
+                have been possible without the various open source projects it
+                depends on.
             </p>
 
             <section className="my-6">
@@ -86,7 +88,11 @@ export default function OpenSourceView() {
                 <p className="text-xl font-bold">Contribute to Kaizen</p>
                 <p className="text-gray-700 my-2">
                     Kaizen is a project currently maintained by{' '}
-                    <a href="https://github.com/dev-xero" target="_blank" className="underline underline-offset-4">
+                    <a
+                        href="https://github.com/dev-xero"
+                        target="_blank"
+                        className="underline underline-offset-4"
+                    >
                         Xero
                     </a>
                     . If you&apos;d like to contribute, report issues, or

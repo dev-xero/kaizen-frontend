@@ -1,5 +1,4 @@
 import { Category } from '@/constants/categories';
-// import { Priority } from '@/constants/priorities';
 
 type Task = {
     id: number | string;

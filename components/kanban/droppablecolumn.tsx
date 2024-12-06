@@ -11,6 +11,7 @@ type DroppableColumnProps = {
     tasks: Task[];
     id: string;
     onNewTaskClicked: (id: string) => void;
+    onDeleteClicked: (id: string) => void;
 };
 
 type NewTaskCardProps = {
@@ -66,6 +67,7 @@ export default function DroppableColumn(props: DroppableColumnProps) {
                             ) : (
                                 props.tasks.map((task, idx) => (
                                     <DraggableTask
+                                        onClick={props.onDeleteClicked}
                                         task={task}
                                         idx={idx}
                                         key={idx}

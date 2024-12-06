@@ -46,12 +46,19 @@ export default function KanbanBoard() {
     const [showTaskModal, setShowTaskModal] = useState(false);
     const [tasks, setTasks] = useState<TasksState>(defaultTaskState);
 
+    // Delays database task updates by 1 second.
     const debouncedUpdateDatabase = useRef(
         debounce(updateTasksInDatabase, 1000)
     ).current;
 
+    // Delays database task creation by 1 second.
     const debouncedCreateDBTask = useRef(
         debounce(createTaskInDatabase, 1000)
+    ).current;
+
+    // Delays database deletion creation by 1 second.
+    const debouncedDeleteDBTask = useRef(
+        debounce(deleteTaskInDatabase, 1000)
     ).current;
 
     // Sort and organize these tasks into their arrays.
@@ -95,10 +102,12 @@ export default function KanbanBoard() {
         setIsOrganizingTasks(false);
     }
 
+    // Attempts to create a new task and sync the change with the database.
     async function createTaskInDatabase(newTask: Partial<Task>) {
         try {
             const credentials = { id: 0, username: '' };
 
+            // We need user credentials incase access tokens have expired
             if (!user) {
                 const storedUser = localStorage.getItem(keys.userKey);
 
@@ -124,6 +133,7 @@ export default function KanbanBoard() {
 
             const { id, ...taskRequestDTO } = newTask;
 
+            // Make request to update database with the new task.
             const res = await axios.post(
                 `${env.api}/tasks/personal/${credentials.username}`,
                 {
@@ -137,7 +147,58 @@ export default function KanbanBoard() {
                 }
             );
 
+            // If the request was successful, force an update on refresh
             if (res.status == 201) {
+                console.log('database in sync, update successful.');
+                localStorage.setItem(keys.forceUpdateKey, 'true');
+            }
+        } catch (err) {
+            // TODO: Notify the user
+            console.error('Error creating task:', err);
+        }
+    }
+
+    async function deleteTaskInDatabase(taskId: string) {
+        try {
+            const credentials = { id: 0, username: '' };
+
+            // We need user credentials incase access tokens have expired
+            if (!user) {
+                const storedUser = localStorage.getItem(keys.userKey);
+
+                if (storedUser) {
+                    const parsedUser = JSON.parse(storedUser);
+
+                    credentials.id = parsedUser.id;
+                    credentials.username = parsedUser.username;
+                } else {
+                    // TODO: notify the user about the error, then redirect.
+                    return;
+                }
+            }
+
+            const accessToken = await getAccessToken(
+                credentials.id,
+                credentials.username
+            );
+
+            if (!accessToken) {
+                throw new Error('Missing access token.');
+            }
+
+            // Make request to update database with the new task.
+            const res = await axios.delete(
+                `${env.api}/tasks/personal/${credentials.username}?id=${taskId}`,
+                {
+                    headers: {
+                        ...NetworkConfig.headers,
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                }
+            );
+
+            // If the request was successful, force an update on refresh
+            if (res.status == 200) {
                 console.log('database in sync, update successful.');
                 localStorage.setItem(keys.forceUpdateKey, 'true');
             }
@@ -286,6 +347,37 @@ export default function KanbanBoard() {
         setActiveColumn(id.toUpperCase() as Category);
     }
 
+    // Removes a task with given id from tasks.
+    function removeTaskWithId(id: string) {
+        const removedTask = (() => {
+            for (const key of Object.keys(tasks) as Array<keyof TasksState>) {
+                const task = tasks[key].find((task) => task.id === id);
+                if (task) return task;
+            }
+            return null;
+        })();
+
+        if (!removedTask) {
+            console.log(`Task with id ${id} not found.`);
+            return;
+        }
+
+        // Compute the updated tasks object
+        const updatedTasks = (() => {
+            const newTasks = { ...tasks };
+            for (const key of Object.keys(newTasks) as Array<
+                keyof TasksState
+            >) {
+                newTasks[key] = newTasks[key].filter((task) => task.id !== id);
+            }
+            return newTasks;
+        })();
+
+        setTasks(updatedTasks);
+        debouncedDeleteDBTask(removedTask.id)
+        console.log('Removed task:', removedTask);
+    }
+
     // Task organization + auth
     useEffect(() => {
         // first try to get tasks from loggedInUser
@@ -378,24 +470,28 @@ export default function KanbanBoard() {
                         tasks={tasks['todo']}
                         id="todo"
                         onNewTaskClicked={(id) => showNewTaskModalForId(id)}
+                        onDeleteClicked={(id) => removeTaskWithId(id)}
                     />
                     <DroppableColumn
                         title="In Progress"
                         tasks={tasks['progress']}
                         id="in_progress"
                         onNewTaskClicked={(id) => showNewTaskModalForId(id)}
+                        onDeleteClicked={(id) => removeTaskWithId(id)}
                     />
                     <DroppableColumn
                         title="Testing"
                         tasks={tasks['testing']}
                         id="testing"
                         onNewTaskClicked={(id) => showNewTaskModalForId(id)}
+                        onDeleteClicked={(id) => removeTaskWithId(id)}
                     />
                     <DroppableColumn
                         title="Completed"
                         tasks={tasks['completed']}
                         id="completed"
                         onNewTaskClicked={(id) => showNewTaskModalForId(id)}
+                        onDeleteClicked={(id) => removeTaskWithId(id)}
                     />
                 </section>
             </DragDropContext>
