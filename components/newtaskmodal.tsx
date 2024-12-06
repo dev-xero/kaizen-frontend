@@ -43,7 +43,7 @@ function CategoryMenu(props: CategoryMenuProps) {
             <SelectTrigger className="w-full shadow-sm focus-visible:border-indigo-500 rounded-md focus:ring-1 focus-visible:ring-1 focus:ring-indigo-100 focus:!outline-none focus-visible:ring-indigo-100">
                 <SelectValue placeholder="Category" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="z-[996]">
                 {categories.map((category, idx) => (
                     <SelectItem key={idx} value={category.category}>
                         {category.name}
@@ -142,7 +142,7 @@ export default function NewTaskModal(props: NewTaskModalProps) {
 
                 {/* DATE PICKER: Due Date */}
                 <Popover>
-                    <PopoverTrigger asChild>
+                    <PopoverTrigger asChild className="z-[996]">
                         <Button
                             variant={'outline'}
                             className={cn(
@@ -154,7 +154,7 @@ export default function NewTaskModal(props: NewTaskModalProps) {
                             {date ? format(date, 'PPP') : <span>Due on</span>}
                         </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
+                    <PopoverContent className="w-auto p-0 z-[996]">
                         <Calendar
                             mode="single"
                             selected={date}
@@ -168,7 +168,14 @@ export default function NewTaskModal(props: NewTaskModalProps) {
                 <section className="my-2 flex gap-2 items-center">
                     <Switch
                         checked={isCompleted}
-                        onCheckedChange={() => setIsCompleted((prev) => !prev)}
+                        onCheckedChange={() =>
+                            setIsCompleted((prev) => {
+                                if (!prev == true) {
+                                    setCategory('COMPLETED');
+                                }
+                                return !prev;
+                            })
+                        }
                     />
                     <h4>Mark as completed</h4>
                 </section>
