@@ -17,6 +17,7 @@ import { debounce } from '@/util/debounce';
 import { useUserData } from '@/hooks/useUserData';
 import { Category } from '@/constants/categories';
 import { DarkSpinner } from '../spinner';
+import { toast } from 'sonner';
 
 type Credential = {
     id: number;
@@ -117,7 +118,9 @@ export default function KanbanBoard() {
                     credentials.id = parsedUser.id;
                     credentials.username = parsedUser.username;
                 } else {
-                    // TODO: notify the user about the error, then redirect.
+                    toast.error(
+                        'This task could not be created, please sign in again.'
+                    );
                     return;
                 }
             }
@@ -153,8 +156,8 @@ export default function KanbanBoard() {
                 localStorage.setItem(keys.forceUpdateKey, 'true');
             }
         } catch (err) {
-            // TODO: Notify the user
             console.error('Error creating task:', err);
+            toast.error('This task could not be created.');
         }
     }
 
@@ -172,7 +175,10 @@ export default function KanbanBoard() {
                     credentials.id = parsedUser.id;
                     credentials.username = parsedUser.username;
                 } else {
-                    // TODO: notify the user about the error, then redirect.
+                    toast.error('User session expired, please login again');
+                    setTimeout(() => {
+                        window.location.href = '/auth/login';
+                    }, 1000);
                     return;
                 }
             }
@@ -203,8 +209,9 @@ export default function KanbanBoard() {
                 localStorage.setItem(keys.forceUpdateKey, 'true');
             }
         } catch (err) {
-            // TODO: Notify the user
-            console.error('Error creating task:', err);
+            console.error(err);
+            toast.error('Unable to delete this task, please try again later.');
+            return;
         }
     }
 
@@ -222,7 +229,10 @@ export default function KanbanBoard() {
                     credentials.id = parsedUser.id;
                     credentials.username = parsedUser.username;
                 } else {
-                    // TODO: notify the user about the error, then redirect.
+                    toast.error('User session expired, please login again.');
+                    setTimeout(() => {
+                        window.location.href = '/auth/login';
+                    }, 1000);
                     return;
                 }
             }
@@ -274,8 +284,8 @@ export default function KanbanBoard() {
                 localStorage.setItem(keys.forceUpdateKey, 'true');
             }
         } catch (error) {
-            // TODO: Notify the user
             console.error('Error updating tasks:', error);
+            toast.error('Unable to update this task, please try again later.');
         }
     }
 
@@ -374,7 +384,7 @@ export default function KanbanBoard() {
         })();
 
         setTasks(updatedTasks);
-        debouncedDeleteDBTask(removedTask.id)
+        debouncedDeleteDBTask(removedTask.id);
         console.log('Removed task:', removedTask);
     }
 
