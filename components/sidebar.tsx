@@ -30,15 +30,15 @@ function SidebarItem(props: SidebarItemProps) {
     return (
         <li
             className={clsx(
-                'flex gap-2 items-center cursor-pointer p-2 hover:border-y-[#ECEDEFAA] select-none relative border border-transparent font-[family-name:var(--font-geist-sans)] w-full',
-                props.isActive && 'bg-[#ECEDEFAA]  !border-y-indigo-200'
+                'flex gap-2 items-center cursor-pointer p-2 dark:hover:border-y-zinc-800 hover:border-y-[#ECEDEFAA] select-none relative border border-transparent font-[family-name:var(--font-geist-sans)] w-full',
+                props.isActive && 'bg-[#ECEDEFAA] dark:bg-zinc-900 dark:!border-y-indigo-500 !border-y-indigo-200'
             )}
             onClick={props.onClick}
         >
-            <div className={props.isActive ? 'text-primary' : 'text-gray-700'}>
+            <div className={props.isActive ? 'text-primary' : 'dark:text-gray-300 text-gray-700'}>
                 {props.icon}
             </div>
-            <span className={props.isActive ? 'text-primary' : 'text-gray-700'}>
+            <span className={props.isActive ? 'text-primary' : 'dark:text-gray-300 text-gray-700'}>
                 {props.text}
             </span>
         </li>
@@ -57,7 +57,7 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
         <>
             <aside
                 className={clsx(
-                    'fixed top-0 md:static col-span-1 border-r border-r-[#D4D5D6] py-4 z-[999] bg-white max-w-[280px] md:max-w-full w-full min-h-screen',
+                    'fixed top-0 md:static col-span-1 dark:bg-zinc-950 dark:border-r-zinc-800 border-r border-r-[#D4D5D6] py-4 z-[999] bg-white max-w-[280px] md:max-w-full w-full min-h-screen',
                     'transition-transform duration-300 ease-in-out transform md:!translate-x-0',
                     isOpen ? 'translate-x-0' : 'translate-x-[-300px]'
                 )}

@@ -24,13 +24,13 @@ const TaskCard = forwardRef<HTMLElement, TaskCardProps>((props, ref) => {
         <section
             ref={ref}
             className={clsx(
-                'p-2 mb-2 border border-[#cbd1dd] bg-white rounded-md font-[family-name:var(--font-geist-sans)] relative group',
+                'p-2 mb-2 border border-[#cbd1dd] bg-white rounded-md font-[family-name:var(--font-geist-sans)] relative group dark:bg-[#242429] dark:border-zinc-800',
                 isDragging && 'bg-slate-300'
             )}
             {...rest} // Pass draggableProps and dragHandleProps
         >
             <div
-                className="absolute right-2 top-2 cursor-pointer group hidden group-hover:block transition-all text-gray-700 hover:text-red-400"
+                className="absolute right-2 top-2 cursor-pointer group hidden group-hover:block transition-all text-gray-700 hover:text-red-400 dark:text-gray-400 dark:hover:text-red-400"
                 onClick={() => onDeleteClicked(task.id.toString())}
             >
                 <Trash size={16} />
@@ -47,20 +47,20 @@ const TaskCard = forwardRef<HTMLElement, TaskCardProps>((props, ref) => {
                         : 'border-green-500'
                 )}
             >
-                <h4 className="mb-4 text-sm text-gray-700">{props.idx + 1}</h4>
-                <h3 className="text font-bold text-[#12111A] mb-2">
+                <h4 className="mb-4 text-sm text-gray-700 dark:text-gray-400">{props.idx + 1}</h4>
+                <h3 className="text font-bold text-[#12111A] mb-2 dark:text-gray-100">
                     {task.name}
                 </h3>
                 <p
                     className={clsx(
-                        'text-gray-700 text-sm',
+                        'text-gray-700 text-sm dark:text-gray-400',
                         task.isCompleted && 'line-through'
                     )}
                 >
                     {task.description}
                 </p>
 
-                <p className="mt-4 text-sm text-gray-500">
+                <p className="mt-4 text-sm text-gray-500 dark:text-gray-300">
                     {task.dueOn && !task.dueOn?.startsWith('9999')
                         ? `Due On: ${transformISOToPlain(task.dueOn)}`
                         : 'No Due Date'}

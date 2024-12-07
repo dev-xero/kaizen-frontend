@@ -22,7 +22,7 @@ type NewTaskCardProps = {
 function NewTaskCard({ id, onClick }: NewTaskCardProps) {
     return (
         <section
-            className="p-2 border-2 border-dashed border-[#c9ceda] rounded-md cursor-pointer text-center hover:border-gray-500 transition text-gray-700 hover:text-gray-950"
+            className="p-2 border-2 border-dashed border-[#c9ceda] rounded-md cursor-pointer text-center hover:border-gray-500 transition text-gray-700 hover:text-gray-950 dark:text-gray-400 dark:border-zinc-700 dark:hover:border-indigo-400"
             onClick={() => onClick(id)}
         >
             New Task
@@ -33,7 +33,7 @@ function NewTaskCard({ id, onClick }: NewTaskCardProps) {
 function TaskPlaceholder() {
     return (
         <section className="w-full h-[240px] flex items-center justify-center">
-            <p className="text-gray-700 text-sm">No tasks here yet.</p>
+            <p className="text-gray-700 text-sm dark:text-gray-400">No tasks here yet.</p>
         </section>
     );
 }
@@ -41,9 +41,9 @@ function TaskPlaceholder() {
 export default function DroppableColumn(props: DroppableColumnProps) {
     return (
         <section className="flex flex-col gap-2 w-[300px] flex-shrink-0 font-[family-name:var(--font-geist-sans)]">
-            <header className="p-2 flex items-center justify-between text-sm bg-[#ECEDEF] rounded-sm">
+            <header className="p-2 flex items-center justify-between text-sm bg-[#ECEDEF] rounded-sm dark:bg-zinc-900">
                 <span>{props.title}</span>
-                <span className="text-gray-700 text-xs">
+                <span className="text-gray-700 text-xs dark:text-indigo-400">
                     {props.tasks.length} Items
                 </span>
             </header>
@@ -90,7 +90,7 @@ export default function DroppableColumn(props: DroppableColumnProps) {
 const TasksList = forwardRef<HTMLElement, TasksListProps>((props, ref) => {
     return (
         <section
-            className="bg-[#ECEDEF] w-full rounded-md p-2"
+            className="bg-[#ECEDEF] w-full rounded-md p-2 dark:bg-zinc-900"
             ref={ref}
             {...props}
         >

@@ -45,7 +45,7 @@ export default function OpenSourceView() {
                 <h2 className="font-bold text-2xl text-white">Open Source</h2>
             </div>
             <h2 className="text-xl font-bold mb-2">About Kaizen</h2>
-            <p className="text-gray-700">
+            <p className="text-gray-700 dark:text-gray-400">
                 Kaizen is an Open Source web application that makes creating and
                 managing tasks a breeze with an intuitive yet minimal interface.
                 You can organize your tasks by status such as todo or completed,
@@ -56,7 +56,7 @@ export default function OpenSourceView() {
 
             <section className="my-6">
                 <p className="text-xl font-bold">Acknowledgments</p>
-                <p className="text-gray-700 my-2">
+                <p className="text-gray-700 my-2 dark:text-gray-400">
                     We express our gratitude to the developers and maintainers
                     of these open-source projects. Their dedication and effort
                     have made Kaizen possible and continue to empower the
@@ -69,11 +69,11 @@ export default function OpenSourceView() {
                 <ul className="my-2">
                     {openSourceLibraries.map((lib, id) => (
                         <li key={id} className="mb-2 ml-2">
-                            <p className="text-gray-700">
+                            <p className="text-gray-700 dark:text-gray-400">
                                 <a
                                     href={lib.url}
                                     target="_blank"
-                                    className="underline underline-offset-4 text-primary"
+                                    className="underline underline-offset-4 text-primary dark:text-indigo-400"
                                 >
                                     {lib.name}
                                 </a>
@@ -86,12 +86,12 @@ export default function OpenSourceView() {
 
             <section className="my-6">
                 <p className="text-xl font-bold">Contribute to Kaizen</p>
-                <p className="text-gray-700 my-2">
+                <p className="text-gray-700 my-2 dark:text-gray-400">
                     Kaizen is a project currently maintained by{' '}
                     <a
                         href="https://github.com/dev-xero"
                         target="_blank"
-                        className="underline underline-offset-4"
+                        className="underline underline-offset-4 hover:text-gray-700 dark:hover:text-gray-300"
                     >
                         Xero
                     </a>
@@ -101,13 +101,13 @@ export default function OpenSourceView() {
                 <a
                     href="https://github.com/dev-xero/kaizen-frontend"
                     target="_blank"
-                    className="underline underline-offset-4 text-primary"
+                    className="underline underline-offset-4 text-primary dark:text-indigo-400"
                 >
                     Contribute on GitHub
                 </a>
             </section>
 
-            <section className="text-gray-700 my-6">
+            <section className="text-gray-700 my-6 dark:text-gray-400">
                 Kaizen is currently licensed under <b>GPL-v3</b>.
             </section>
         </section>

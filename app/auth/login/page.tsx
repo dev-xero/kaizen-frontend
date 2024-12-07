@@ -116,7 +116,7 @@ function LoginForm() {
         <form onSubmit={handleSignInEvent} className="max-w-lg">
             <KaizenLogo />
             <h2 className="font-bold text-2xl my-2">Login</h2>
-            <p className="text-gray-700">
+            <p className="text-gray-700 dark:text-gray-400">
                 Welcome back to Kaizen 改 善 — we&apos;re glad to see you again.
             </p>
             {/* TextFields */}
@@ -133,7 +133,7 @@ function LoginForm() {
                         required={true}
                         placeholder="Email address"
                         className={cn(
-                            'pl-10 py-2 border border-gray-300 focus-visible:border-indigo-500 rounded-md focus:ring-2 focus-visible:ring-2 focus:ring-indigo-100 focus:!outline-none focus-visible:ring-indigo-100'
+                            'pl-10 py-2 border border-gray-300 dark:focus:ring-indigo-300 focus-visible:border-indigo-500 rounded-md focus:ring-2 focus-visible:ring-2 focus:ring-indigo-100 focus:!outline-none focus-visible:ring-indigo-100 dark:border-zinc-700'
                         )}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
@@ -151,7 +151,7 @@ function LoginForm() {
                         required={true}
                         placeholder="Password"
                         className={cn(
-                            'pl-10 py-2 border border-gray-300 focus-visible:border-indigo-500 rounded-md focus:ring-2 focus-visible:ring-2 focus:ring-indigo-100 focus:!outline-none focus-visible:ring-indigo-100'
+                            'pl-10 py-2 border border-gray-300 dark:focus:ring-indigo-300 focus-visible:border-indigo-500 rounded-md focus:ring-2 focus-visible:ring-2 focus:ring-indigo-100 focus:!outline-none focus-visible:ring-indigo-100 dark:border-zinc-700'
                         )}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
@@ -161,7 +161,7 @@ function LoginForm() {
             {errMessage && <ErrorMessage msg={errMessage} />}
             <Button
                 name="kaizen-button"
-                className="bg-indigo-500 font-bold text-xl mt-2 w-full hover:bg-indigo-600 disabled:opacity-90 disabled:cursor-default"
+                className="bg-indigo-500 font-bold text-xl mt-2 w-full hover:bg-indigo-600 disabled:opacity-90 disabled:cursor-default text-gray-200"
                 disabled={isDisabled || loginMutation.isPending}
             >
                 {loginMutation.isPending ? (

@@ -414,7 +414,7 @@ export default function KanbanBoard() {
     // Show nothing while loading
     if (isLoading || isOrganizingTasks) {
         return (
-            <h4 className="text-gray-700 flex gap-2 items-center justify-center">
+            <h4 className="text-gray-700 flex gap-2 items-center justify-center dark:text-gray-400">
                 <DarkSpinner />
                 Getting your tasks.
             </h4>
@@ -474,7 +474,7 @@ export default function KanbanBoard() {
                 />
             )}
             <DragDropContext onDragEnd={handleDragEnd}>
-                <section className="p-4 w-full border border-[#cacbcb] rounded-md bg-white flex gap-2">
+                <section className="p-4 w-full border border-[#cacbcb] rounded-md bg-white flex gap-2 dark:bg-zinc-950 dark:border-zinc-900">
                     <DroppableColumn
                         title="To-Do"
                         tasks={tasks['todo']}

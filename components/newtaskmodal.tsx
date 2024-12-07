@@ -115,7 +115,7 @@ export default function NewTaskModal(props: NewTaskModalProps) {
                     placeholder="Name"
                     required={true}
                     className={cn(
-                        'py-2 border border-gray-300 focus-visible:border-indigo-500 rounded-md focus:ring-2 focus-visible:ring-2 focus:ring-indigo-100 focus:!outline-none focus-visible:ring-indigo-100'
+                        'py-2 dark:border-zinc-800 border border-gray-300 focus-visible:border-indigo-500 rounded-md focus:ring-2 focus-visible:ring-2 focus:ring-indigo-100 focus:!outline-none focus-visible:ring-indigo-100 dark:focus-visible:ring-indigo-400'
                     )}
                     value={name}
                     onChange={(ev) => setName(ev.target.value)}
