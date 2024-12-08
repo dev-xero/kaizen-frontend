@@ -14,6 +14,13 @@ import {
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { useEffect, useState } from 'react';
+import { User } from '@/types/user.type';
+import keys from '@/config/keys';
+
+type ProfileInformationProps = {
+    user: User;
+};
 
 function ThemeToggle() {
     const { setTheme, theme } = useTheme();
@@ -43,7 +50,10 @@ function ThemeToggle() {
     );
 }
 
-function ProfileInformation() {
+function ProfileInformation(props: ProfileInformationProps) {
+    const [username, setUsername] = useState(props.user.username);
+    const [email, setEmail] = useState('');
+
     return (
         <section className="p-4 bg-white dark:bg-zinc-950 border border-gray-300 dark:border-zinc-900 rounded-lg">
             <h3 className="flex items-center gap-2 text-primary dark:text-indigo-400 py-2">
@@ -63,6 +73,8 @@ function ProfileInformation() {
                     className={cn(
                         'py-2 border border-gray-300 dark:focus:ring-indigo-300 focus-visible:border-indigo-500 rounded-md focus:ring-2 focus-visible:ring-2 focus:ring-indigo-100 focus:!outline-none focus-visible:ring-indigo-100 dark:border-zinc-700'
                     )}
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
                 />
                 <Input
                     name="kaizen-settings-email"
@@ -72,6 +84,8 @@ function ProfileInformation() {
                     className={cn(
                         'py-2 border border-gray-300 dark:focus:ring-indigo-300 focus-visible:border-indigo-500 rounded-md focus:ring-2 focus-visible:ring-2 focus:ring-indigo-100 focus:!outline-none focus-visible:ring-indigo-100 dark:border-zinc-700'
                     )}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                 />
 
                 <Button className="font-bold text-white bg-primary mt-4 w-full sm:max-w-[240px]">
@@ -190,6 +204,28 @@ function DangerZone() {
 }
 
 export default function SettingsView() {
+    const [isLoading, setIsLoading] = useState(true);
+    const [user, setUser] = useState<User | null>(null);
+
+    useEffect(() => {
+        const storedUser = JSON.parse(
+            localStorage.getItem(keys.userKey) ?? 'null'
+        );
+        if (!storedUser) {
+            window.location.href = '/auth/login';
+        } else {
+            setUser(storedUser);
+        }
+        setIsLoading(false);
+    }, []);
+
+    if (isLoading) return <></>;
+
+    if (!user) {
+        window.location.href = '/auth/login';
+        return;
+    }
+
     return (
         <section>
             <h2 className="font-bold text-2xl text-gray-900 mb-4 dark:text-indigo-200">
@@ -197,7 +233,7 @@ export default function SettingsView() {
             </h2>
 
             <section className="gap-4 flex flex-col">
-                <ProfileInformation />
+                <ProfileInformation user={user} />
                 <Preferences />
                 <UpdatePassword />
                 <DangerZone />
