@@ -9,7 +9,7 @@ type ScreenProviderProps = {
 }
 
 const ScreenProvider = ({ children }: ScreenProviderProps) => {
-    const [currentScreen, setCurrentScreen] = useState(screen.PERSONAL);
+    const [currentScreen, setCurrentScreen] = useState(screen.SETTINGS);
 
     return (
         <ScreenContext.Provider value={{ currentScreen, setCurrentScreen }}>

@@ -7,6 +7,7 @@ import {
     FolderUser,
     Gear,
     UsersThree,
+    SignOut,
     X,
 } from '@phosphor-icons/react';
 import clsx from 'clsx';
@@ -86,11 +87,6 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
                             icon={
                                 <FolderUser
                                     size={24}
-                                    // weight={
-                                    //     currentScreen === screen.PERSONAL
-                                    //         ? 'fill'
-                                    //         : 'regular'
-                                    // }
                                 />
                             }
                             text="Personal"
@@ -101,11 +97,6 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
                             icon={
                                 <UsersThree
                                     size={24}
-                                    // weight={
-                                    //     currentScreen === screen.TEAMS
-                                    //         ? 'fill'
-                                    //         : 'regular'
-                                    // }
                                 />
                             }
                             text="Teams"
@@ -116,11 +107,6 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
                             icon={
                                 <Gear
                                     size={24}
-                                    // weight={
-                                    //     currentScreen === screen.SETTINGS
-                                    //         ? 'fill'
-                                    //         : 'regular'
-                                    // }
                                 />
                             }
                             text="Settings"
@@ -131,16 +117,21 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
                             icon={
                                 <BookOpen
                                     size={24}
-                                    // weight={
-                                    //     currentScreen === screen.OPEN_SOURCE
-                                    //         ? 'fill'
-                                    //         : 'regular'
-                                    // }
                                 />
                             }
                             text="Open Source"
                             isActive={currentScreen === screen.OPEN_SOURCE}
                             onClick={() => setActiveView(screen.OPEN_SOURCE)}
+                        />
+                        <SidebarItem
+                            icon={
+                                <SignOut
+                                    size={24}
+                                />
+                            }
+                            text="Log Out"
+                            isActive={currentScreen === screen.LOG_OUT}
+                            onClick={() => setActiveView(screen.LOG_OUT)}
                         />
                     </ul>
                 </section>

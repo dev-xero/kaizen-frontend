@@ -3,4 +3,5 @@ export enum screen {
     TEAMS = 'Teams',
     SETTINGS = 'Settings',
     OPEN_SOURCE = 'Open Source',
+    LOG_OUT = 'Log Out',
 }

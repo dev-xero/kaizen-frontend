@@ -1,7 +1,7 @@
 export default function TeamsView() {
     return (
         <section>
-            <h2>Teams View</h2>
+            <h2 className="font-bold text-lg">Teams to be implemented.</h2>
         </section>
     );
 }

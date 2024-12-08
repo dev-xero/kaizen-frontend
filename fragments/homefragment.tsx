@@ -10,6 +10,7 @@ import OpenSourceView from '@/views/opensource.view';
 import PersonalView from '@/views/personal.view';
 import SettingsView from '@/views/settings.view';
 import TeamsView from '@/views/teams.view';
+import LogOutView from '@/views/logout.view';
 
 export default function HomeFragment() {
     const { currentScreen } = useContext(ScreenContext);
@@ -32,6 +33,10 @@ export default function HomeFragment() {
         case screen.OPEN_SOURCE:
             screenComponent = <OpenSourceView />;
             break;
+        
+        case screen.LOG_OUT:
+                screenComponent = <LogOutView />;
+                break;
 
         default:
             screenComponent = <SettingsView />;
