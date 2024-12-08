@@ -40,7 +40,7 @@ function CategoryMenu(props: CategoryMenuProps) {
                 props.setSelectedOption(value as Category);
             }}
         >
-            <SelectTrigger className="w-full shadow-sm focus-visible:border-indigo-500 rounded-md focus:ring-1 focus-visible:ring-1 focus:ring-indigo-100 focus:!outline-none focus-visible:ring-indigo-100">
+            <SelectTrigger className="w-full shadow-sm focus-visible:border-indigo-500 rounded-md focus:ring-1 focus-visible:ring-1 focus:ring-indigo-100 focus:!outline-none focus-visible:ring-indigo-100 dark:border-zinc-800 dark:focus-visible:ring-indigo-400">
                 <SelectValue placeholder="Category" />
             </SelectTrigger>
             <SelectContent className="z-[996]">
@@ -115,7 +115,7 @@ export default function NewTaskModal(props: NewTaskModalProps) {
                     placeholder="Name"
                     required={true}
                     className={cn(
-                        'py-2 dark:border-zinc-800 border border-gray-300 focus-visible:border-indigo-500 rounded-md focus:ring-2 focus-visible:ring-2 focus:ring-indigo-100 focus:!outline-none focus-visible:ring-indigo-100 dark:focus-visible:ring-indigo-400'
+                        'py-2 dark:border-zinc-800 dark:focus-visible:ring-indigo-400 border border-gray-300 focus-visible:border-indigo-500 rounded-md focus:ring-2 focus-visible:ring-2 focus:ring-indigo-100 focus:!outline-none focus-visible:ring-indigo-100'
                     )}
                     value={name}
                     onChange={(ev) => setName(ev.target.value)}
@@ -127,7 +127,7 @@ export default function NewTaskModal(props: NewTaskModalProps) {
                     placeholder="Description"
                     required={true}
                     className={cn(
-                        'py-2 border border-gray-300 focus-visible:border-indigo-500 rounded-md focus:ring-2 focus-visible:ring-2 focus:ring-indigo-100 focus:!outline-none focus-visible:ring-indigo-100'
+                        'dark:border-zinc-800 dark:focus-visible:ring-indigo-400 py-2 border border-gray-300 focus-visible:border-indigo-500 rounded-md focus:ring-2 focus-visible:ring-2 focus:ring-indigo-100 focus:!outline-none focus-visible:ring-indigo-100'
                     )}
                     value={description}
                     onChange={(ev) => setDescription(ev.target.value)}

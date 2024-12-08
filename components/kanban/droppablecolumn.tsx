@@ -55,7 +55,7 @@ export default function DroppableColumn(props: DroppableColumnProps) {
                     >
                         <div
                             className={clsx(
-                                snapshot.isDraggingOver ? 'bg-blue-100' : ''
+                                snapshot.isDraggingOver ? 'bg-blue-100 dark:bg-zinc-700' : ''
                             )}
                         >
                             {props.tasks.length == 0 ? (

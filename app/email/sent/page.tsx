@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { Mailbox } from '@phosphor-icons/react';
-import { redirect } from 'next/navigation';
 
 import keys from '@/config/keys';
 import CenteredGridLayout from '@/layouts/CenteredGridLayout';
@@ -15,9 +14,9 @@ function EmailVerificationSection() {
         const storedEmail = localStorage.getItem(keys.obfuscatedEmailKey);
         if (!storedEmail) {
             if (hasCookie(keys.accessTokenKey)) {
-                redirect('/');
+                window.location.href = '/'
             } else {
-                redirect('/auth/signup');
+                window.location.href = '/auth/signup'
             }
         } else {
             setEmail(storedEmail);
@@ -25,14 +24,14 @@ function EmailVerificationSection() {
     }, []);
 
     if (email === null) {
-        return null;
+        return <></>;
     }
 
     return (
         <main>
             <Mailbox size={48} className="mb-4 text-primary" />
             <h2 className="font-bold text-2xl my-2">Email Sent</h2>
-            <p className="text-gray-700">
+            <p className="text-gray-700 dark:text-gray-300">
                 A verification email has been sent to{' '}
                 <span className="text-primary">{email}</span>. Please check your
                 inbox.

@@ -8,13 +8,13 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 function ThemeToggle() {
-    const { setTheme } = useTheme();
+    const { setTheme, theme } = useTheme();
 
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+            <DropdownMenuTrigger asChild className='w-full max-w-[200px]'>
                 <Button variant="outline">
-                    <span>Select theme</span>
+                    <span>Currently set as {theme}</span>
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -35,13 +35,16 @@ function ThemeToggle() {
 export default function SettingsView() {
     return (
         <section>
-            <h2 className="font-bold text-2xl text-gray-900 mb-2">Settings</h2>
-            <p className="text-gray-700 my-2">
+            <h2 className="font-bold text-2xl text-gray-900 mb-2 dark:text-indigo-200">Settings</h2>
+            <p className="text-gray-700 my-2 dark:text-gray-400 mb-8">
                 General device and account settings.
             </p>
 
-            <h3>App Theme</h3>
-            <ThemeToggle />
+            {/* THEME */}
+            <section>
+                <h3 className="font-bold text-base mb-4 text-gray-700 dark:text-gray-400">Site Theme</h3>
+                <ThemeToggle />
+            </section>
         </section>
     );
 }
