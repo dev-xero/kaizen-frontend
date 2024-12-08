@@ -16,7 +16,7 @@ import { getAccessToken } from '@/util/access';
 import { debounce } from '@/util/debounce';
 import { useUserData } from '@/hooks/useUserData';
 import { Category } from '@/constants/categories';
-import { DarkSpinner } from '../spinner';
+import { PurpleSpinner } from '../spinner';
 import { toast } from 'sonner';
 
 type Credential = {
@@ -415,7 +415,7 @@ export default function KanbanBoard() {
     if (isLoading || isOrganizingTasks) {
         return (
             <h4 className="text-gray-700 flex gap-2 items-center justify-center dark:text-gray-400">
-                <DarkSpinner />
+                <PurpleSpinner />
                 Getting your tasks.
             </h4>
         );

@@ -1,4 +1,4 @@
-import { DarkSpinner } from '@/components/spinner';
+import { PurpleSpinner } from '@/components/spinner';
 import CenteredGridLayout from '@/layouts/CenteredGridLayout';
 
 export default function LoadingFragment() {
@@ -6,7 +6,7 @@ export default function LoadingFragment() {
         <CenteredGridLayout>
             <main>
                 <h4 className="text-xl flex gap-2 items-center justify-center">
-                    <DarkSpinner />
+                    <PurpleSpinner />
                     Just a moment.
                 </h4>
             </main>

@@ -10,6 +10,9 @@ import {
     UserCircle,
     LockKeyOpen,
     Warning,
+    CheckCircle,
+    Info,
+    XCircle,
 } from '@phosphor-icons/react';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
@@ -17,6 +20,8 @@ import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
 import { User } from '@/types/user.type';
 import keys from '@/config/keys';
+import { toast, Toaster } from 'sonner';
+import { AlertTriangle, Loader } from 'lucide-react';
 
 type ProfileInformationProps = {
     user: User;
@@ -32,7 +37,7 @@ function ThemeToggle() {
                 className="w-full sm:max-w-[200px] dark:bg-zinc-900"
             >
                 <Button variant="outline">
-                    <span>Currently set to {theme} theme</span>
+                    <span>Set to {theme} theme</span>
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -97,6 +102,12 @@ function ProfileInformation(props: ProfileInformationProps) {
 }
 
 function Preferences() {
+    function clearCache() {
+        localStorage.removeItem(keys.cacheTimeKey);
+        localStorage.setItem(keys.forceUpdateKey, 'true');
+        toast.success('Successfully cleared cache data.');
+    }
+
     return (
         <section className="p-4 bg-white dark:bg-zinc-950 border border-gray-300 dark:border-zinc-900 rounded-lg">
             <h3 className="flex items-center gap-2 text-primary dark:text-indigo-400 py-2">
@@ -126,10 +137,14 @@ function Preferences() {
                             Cached Data
                         </h3>
                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                            Clear device cache to fetch recent data on refresh.
+                            Clear device cache to force fetch recent data on
+                            refresh.
                         </p>
                     </p>
-                    <Button className="text-white font-bold w-full sm:max-w-[200px]">
+                    <Button
+                        className="text-white font-bold w-full sm:max-w-[200px]"
+                        onClick={clearCache}
+                    >
                         Clear Cache
                     </Button>
                 </section>
@@ -238,6 +253,36 @@ export default function SettingsView() {
                 <UpdatePassword />
                 <DangerZone />
             </section>
+
+            <Toaster
+                className="toaster group"
+                toastOptions={{
+                    classNames: {
+                        toast: 'group toast group-[.toaster]:bg-zinc-950 group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg',
+                        description: 'group-[.toast]:text-muted-foreground',
+                        actionButton:
+                            'group-[.toast]:bg-primary group-[.toast]:text-primary-foreground',
+                        cancelButton:
+                            'group-[.toast]:bg-muted group-[.toast]:text-muted-foreground',
+                    },
+                }}
+                icons={{
+                    success: <CheckCircle className="h-5 w-5 text-green-500" />,
+                    info: <Info className="h-5 w-5 text-blue-500" />,
+                    warning: (
+                        <AlertTriangle className="h-5 w-5 text-amber-500" />
+                    ),
+                    error: (
+                        <XCircle
+                            className="h-5 w-5 text-red-500"
+                            weight="fill"
+                        />
+                    ),
+                    loading: (
+                        <Loader className="h-6 w-6 text-gray-500 animate-spin" />
+                    ),
+                }}
+            />
         </section>
     );
 }

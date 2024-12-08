@@ -131,7 +131,7 @@ function SignUpForm() {
                 {/* USERNAME */}
                 <div className="relative">
                     <UserCircle
-                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-500"
+                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-500 dark:text-indigo-400 "
                         size={24}
                     />
                     <Input
@@ -149,7 +149,7 @@ function SignUpForm() {
                 {/* PASSWORD */}
                 <div className="relative">
                     <Lock
-                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-500"
+                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-500 dark:text-indigo-400 "
                         size={24}
                     />
                     <Input

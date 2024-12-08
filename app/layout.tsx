@@ -50,7 +50,7 @@ export default function RootLayout({
                     disableTransitionOnChange
                 >
                     <body
-                        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white dark:bg-black`}
+                        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-white dark:bg-zinc-950`}
                     >
                         {children}
                     </body>
