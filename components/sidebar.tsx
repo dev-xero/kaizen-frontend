@@ -78,7 +78,7 @@ export default function Sidebar({ isOpen, setIsOpen }: SidebarProps) {
                         className="cursor-pointer p-2 inline-block md:hidden"
                         onClick={() => setIsOpen((prev) => !prev)}
                     >
-                        <X size={24} className="text-gray-700 dark:text-400" />
+                        <X size={24} className="text-gray-700 dark:text-gray-400" />
                     </div>
                 </header>
                 <section className="flex flex-col">
