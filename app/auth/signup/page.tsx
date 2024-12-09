@@ -119,7 +119,7 @@ function SignUpForm() {
                 {/* EMAIL ADDRESS */}
                 <div className="relative">
                     <At
-                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-500"
+                        className="absolute left-2 top-1/2 transform -translate-y-1/2 text-indigo-500"
                         size={24}
                     />
                     <Input
@@ -155,7 +155,7 @@ function SignUpForm() {
                 {/* PASSWORD */}
                 <div className="relative">
                     <Lock
-                        className="absolute left-3 top-1/2 transform -translate-y-1/2 text-indigo-500 dark:text-indigo-400 "
+                        className="absolute left-2 top-1/2 transform -translate-y-1/2 text-indigo-500 dark:text-indigo-400 "
                         size={24}
                     />
                     <Input
