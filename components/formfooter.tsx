@@ -9,7 +9,7 @@ export default function FormFooter(props: FormFooterProps) {
         <footer className="flex items-center justify-center gap-4 mt-8 mb-4">
             <Link
                 text="forgot my password"
-                href="/forgot-password"
+                href="/auth/forgot-password"
                 external={false}
             />
             {props.alternative == 'signup' ? (
