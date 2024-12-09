@@ -81,6 +81,12 @@ function SignUpForm() {
             return;
         }
 
+        // Username must not have spaces
+        if (/\s/.test(username)) {
+            displayErrorMessage('Username must not contain spaces.');
+            return;
+        }
+
         // Password needs to be at least 8 chars
         if (password.trim().length < 8) {
             displayErrorMessage(
