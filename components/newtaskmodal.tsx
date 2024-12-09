@@ -107,7 +107,7 @@ export default function NewTaskModal(props: NewTaskModalProps) {
             </div>
 
             <h2 className="font-bold text-lg">Add New Task</h2>
-            <p className="text-gray-700 mb-4">Add a new task to this column</p>
+            <p className="text-gray-700 mb-4 dark:text-gray-400">Add a new task to this column</p>
             <section className="mt-2 flex flex-col gap-2">
                 {/* NAME */}
                 <Input
@@ -183,7 +183,7 @@ export default function NewTaskModal(props: NewTaskModalProps) {
                 {/* ADD TASK BUTTON */}
                 <Button
                     name="add-btn"
-                    className="bg-indigo-500 font-bold text-xl mt-2 w-full hover:bg-indigo-600 disabled:opacity-90 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-default"
+                    className="bg-indigo-500 font-bold text-xl mt-2 w-full hover:bg-indigo-600 disabled:opacity-90 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-default dark:disabled:bg-zinc-600 dark:disabled:text-zinc-400"
                     disabled={isDisabled}
                     onClick={composeTaskSpecification}
                 >
