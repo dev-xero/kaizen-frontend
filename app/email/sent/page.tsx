@@ -34,7 +34,7 @@ function EmailVerificationSection() {
             <p className="text-gray-700 dark:text-gray-300">
                 A verification email has been sent to{' '}
                 <span className="text-primary">{email}</span>. Please check your
-                inbox.
+                inbox or spam folder.
             </p>
         </main>
     );
